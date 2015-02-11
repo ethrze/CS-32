@@ -1,0 +1,42 @@
+hw.txt
+Homework 2
+Grace Phillips / 904493541
+
+2. 
+
+6, 4
+6, 3
+6, 5
+7, 5
+8, 5
+8, 6
+8, 7
+8, 8
+7, 8
+6, 6
+5, 4
+4, 4
+
+
+4. 
+
+6, 4
+5, 4
+6, 5
+6, 3
+4, 4
+6, 6
+7, 5
+3, 4
+8, 5
+2, 4
+8, 6
+1, 4
+
+How do the two algorithms differ from each other? (Hint: how and why do they visit cells in the maze in a different order?)
+
+The algorithms visit cells in a different order because of the differences in the nature of stacks and queues. 
+
+A stack, reaching completion, having determined that the maze is solvable, reads considerably more like an ordered series of directions (though it still isn't one). On a stack, because you push and pop from one end, you accumulate all possible directions on the stack, and then you pop off the first and find all of its possible directions, which get piled on top. First in first out assures that later directions get piled on more in sequence until a solution is found— or isn't. Growing one, single solution. 
+
+With the queue, since you're popping from one end and pushing to the other, you essentially pop from the 'beginning end' every time. You try all the directions available from the starting coordinate before you try any of those directions' direction 'children'. In a way, you're growing multiple possible solutions simultaneously. Sort of in a disorganized way, but there is, of course, a lot of order. 
