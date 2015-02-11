@@ -7,7 +7,7 @@ What is the md filetype?
 
 Who are we?
 
-What is humanities purpose?
+What is humanity's purpose?
 
 Did I accidentally make my entire user a repo when I first tried to learn git?
 
