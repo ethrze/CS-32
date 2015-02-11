@@ -1,0 +1,211 @@
+report.txt
+Grace Phillips
+
+Project 2 Report
+
+———— Doubly-Linked List Implementation ————
+
+I have a head that's a pointer to the first node in the list; the first node in the list's previous Node pointer is null; the last item in the list's next Node pointer is also null. That's it!
+
+
+
+———— Pseudocode for non-trivial algorithms ————
+
+I fear I can't remember exactly what goes for 'non-trivial' around here, so I'm just going to do almost everything and hope for the best. 
+
+_COPY CONSTRUCTOR_
+initialize uniqSize, maxSize in list;
+initialize head; 
+loop through other:
+	if you've reached the end of the list:
+		loop back in the other direction:*
+			loop for number of occurrences:
+				insert the item! (item from * loop var)
+_OPERATOR OVERLOAD_
+if the two aren't already equal:
+	make a temp version of rhs
+	call swap on temp
+return this.
+
+_DESTRUCTOR_
+loop through multiset:
+	delete node;
+
+_EMPTY_
+I've decided I hope this is trivial. 
+
+_SIZE_
+initialize tally var to zero;
+loop through nodes:
+	increase tally by m_occ for each node;
+return tally;
+
+_UNIQUESIZE_
+I've decided I hope this is trivial.
+
+_INSERT_
+//First case, the value is not unique
+loop through nodes:
+	if the value is equal to the m_item
+		iterate the # of occurrences
+		return
+//Second case, the value is unique
+initialize temp node; 
+if the head isn't null:
+	alter the prev pointer of the following item;
+	alter the next pointer of the new node; 
+	set the new node's prev to nullptr, it's being added at the beginning
+	increment unique size counter;
+	return;
+else:
+	set the new node's next and prev to nullptr;
+	set head to new node; 
+	increment unique size counter;
+	return;
+
+_ERASE_
+loop through all nodes:
+	if the value is equal to the item:
+		if the item's # of occurrences is > 1:
+			decrement the node's occurrence #;
+			return 1; 
+		// there's only one left
+		else: 
+			call eraseAll on the value; 
+return false
+
+_ERASEALL_
+loop through nodes:
+	if the value is equal to the item:
+		if it's the only node
+			set the head = nullptr
+// attend to 'next' pointers
+		if it's the first node
+			set the head = next item in list
+			set prev of next item in list to nullptr
+		else:
+			set the previous items next to the next item
+// attend to 'prev' pointers
+		if it's the last node
+			set prev item's next to nullptr
+		else
+			set next item's prev to previous item
+		decrement unique size counter
+		delete node in question
+		return
+return
+
+_CONTAINS_
+I've decided I hope this is trivial.
+
+_COUNT_
+I've decided I hope this is trivial.
+
+_GET_
+temp variable = 0
+if the input is all good
+	loop through nodes
+		if the temp is equal to i
+			set value to node's item
+			return # of occurrences
+		else
+			increment temp
+return 0
+
+_SWAP_
+swap heads using temporary node*
+swap uniqueSize and maxSize in the same way;
+
+_DUMP_
+Not going to tell you about this one. 
+
+_COMBINE_
+make dummy multiset;
+loop through size of ms1
+	make dummy itemtype
+	call get on loop int, item type
+	loop through number of occurrences of value
+		insert value into dummy
+loop through size of ms2
+	make dummy itemtype
+	call get on loop int, dummy
+	loop through number of occurrences of value
+		insert value into dummy
+set result to dummy multiset
+
+
+_SUBTRACT_
+make dummy multiset;
+loop through size of ms1
+	make dummy itemtype
+	call get on loop int, itemtype dummy
+	if ms2 contains the dummy
+		if #of dummies in ms1 > #ofdummies in ms2
+			loop through difference in #dummies
+				insert dummy
+	else
+		loop through #of dummies in ms1
+			insert dummy
+set result to dummy multiset
+
+
+———— Test Cases ————
+
+// Just working with string as my ItemType for simplicity. 
+Multiset ms; 					// default constructor
+assert(ms.empty()); 				// test empty
+assert(!ms.erase("thing")); 			// nothing to erase
+assert(ms.size() == 0); 			// test size
+assert(ms.insert("bob") == 1); 			// test insert
+ms.insert("bob"); 	
+assert(ms.count("bob") == 2);			// test count
+assert(ms.uniqueSize() == 1);			// test uniqueSize
+assert(ms.size() == 2); 			// test size
+assert(ms.insert("alice") == 1); 		// test insert
+assert(ms.insert("eunice") == 1);
+ItemType value;
+int i = 0; 
+ms.get(i, value); 				// test get
+assert(value == "eunice"); i++; ms.get(i, value); 
+assert(value == "alice"); i++; ms.get(i, value); 
+assert(value == "bob"); i++; 
+assert(ms.get(i, value) == 0); 
+assert(value == "bob"); 			// finished testing get
+assert(ms.eraseAll("bob") == 2); 		// test eraseAll
+assert(ms.erase("eunice") == 1); 		// test erase
+assert(ms.size() == 1); 
+assert(ms.contains("eunice") == 0);		// test contains
+
+Multiset sm;
+sm.insert("horatio"); 
+ms.swap(sm);					// test swap
+assert(sm.contains("alice"));
+assert(ms.contains("horatio")); 
+sm.insert("alice"); 
+sm.insert("alice"); 
+sm.insert("horatio"); 
+sm.insert("spalding"); 
+sm.insert("firenze"); 
+sm.insert("alan"); 
+
+ms.insert("alice"); 
+ms.insert("horatio"); 
+ms.insert("gendry"); 
+ms.insert("eru iluvatar"); 
+
+Multiset mnm; 
+combine(sm, ms, mnm); 				// test combine
+assert(mnm.count("alice") == 4); 	
+
+subtract(sm, ms, mnm); 				// works with non-empty result
+assert(mnm.count("alice") == 2); 		// test subtract
+assert(!mnm.contains("eru iluvatar")); 		// doesn't include m2
+
+
+
+
+
+
+
+
+

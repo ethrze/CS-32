@@ -1,0 +1,1171 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1343\cocoasubrtf160
+{\fonttbl\f0\fnil\fcharset0 Consolas;\f1\fnil\fcharset0 Consolas-Italic;\f2\fnil\fcharset0 Consolas-Bold;
+\f3\fnil\fcharset0 Consolas-BoldItalic;}
+{\colortbl;\red255\green255\blue255;\red174\green0\blue240;}
+\margl1440\margr1440\vieww28600\viewh16200\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 http://cs.ucla.edu/classes/winter15/cs32/\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+The same advice:\
+start early\
+develop incrementally\
+read the fucking spec\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+// includes Wednesday 1/7 edits\
+\
+#include <iostream>\
+#include <cstdlib>\
+#include <cmath>\
+using namespace std;\
+\
+class Circle\
+\{\
+	public:\
+		// at this point, it just complains about 3 args\
+		Circle(double x, double y, double r); // constructor \'97 doesn\'92t return a value\
+		// now the first two lines of main compile\
+		bool scale(double factor);\
+		void draw() const;\
+		// we need accessors!\
+		double radius() const; \
+		\
+	private: 		 // because we don\'92t really want them getting into these and fucking them up (i.e. negative rate, changing things that ought not be changed, etc.)\
+		// Class invariant: m_r > 0\
+		double m_x;\
+		double m_y; \
+		double m_r; // naming convention that makes it easy to distinguish between data members and \'93something else\'94\
+				 // some people use trailing underscores \'93x_\'94, \'93y_\'94, etc\
+				 // some use some common preface, see Smallberg above\
+\};\
+\
+double area(const Circle& x);\
+\
+Circle::Circle(double x, double y, double r) \
+// : m_x(x), m_y(y), m_r(r)		// member initialization list\
+\{\
+	if (r > 0) \
+	\{\
+		m_r = r; \
+		m_x = x; \
+		m_y = y;\
+	\} else \{\
+		cerr << \'93Bad (negative) r input!! \'94 << r << \'93isn\'92t going to cut it.\'94 << endl;\
+		// you want to \'93throw an exception\'94, we don\'92t know what those are, though. \
+		// we need to completely kill the program!\
+		exit(1); // takes an int argument, \'93exit status\'94 \'97> can convey a tiny bit of info to OS, 0=program thinks it succeeded, 0!=didn\'92t succeed (various non-zeroes mean various things)\
+	\} \
+\}\
+\
+bool Circle::scale(double factor)\
+\{\
+	if (factor <= 0)\
+		return false;	\
+	m_r *= factor;\
+	return true;\
+\}\
+\
+void Circle::draw() const\
+\{\
+	. . . draw the circle . . . \
+\}\
+\
+double Circle::radius() const 			// radius promises not to modify the circle \
+\{\
+	return m_r; \
+\}\
+\
+double area(const Circle& x)\
+// double area(const Circle* p)			// You probably wouldn't want to use a pointer here, because you could end up passing a nullptr to radius. \
+\{\
+	const double PI = r * atan(1.0); 	// try not to code Pi as a constant. You will be sad. \
+	// return PI * p->radius() * p->radius(); \
+	return PI * x.radius() * x.radius();  // once you add const to the area function, this is going to cause problems. The radius() function has to also be const. \
+\}\
+// with just the interface (bare structures and declarations), the program 
+\f1\i is 
+\f0\i0 about half way there.\
+\
+int main() \
+\{\
+	Circle blah(8, -3, 3.7); \
+	Circle c(2, 5, 10); \
+	c.scale(2);\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+	double f; \
+	cin << f; \
+	if (!c.scale(f))\
+		. . . error . . . \
+	c.draw(); \
+	cout << area(c);\
+	// cout << area(&c); \
+\}\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+- Function Call Syntax Review -\
+Member function: 	c.draw()	c.scale(2)\
+Non-member function:	area(c)	 \
+\
+interface (what) vs. implementation (how)\
+\
+\'93encapsulation\'94	\'93information hiding\'94	\'97> making things private! helps prevent your code from breaking when you change the implementation\
+\
+\'93class invariant\'94 \'97> properties that should always be true for a class of this type\
+\
+member initialization list \'97> only to be used for constructors. Do the initializations for the data members \
+	bool Class::Class(int x, int y, int x)\
+	 : m_x(x), m_y(y), m_z(z)\
+	\{\
+	\}\
+you either do this or you initialize them in the body of the constructor. \
+\
+YOU\'92LL SEE THE STUFF FOR PROJECT 1 ON WEDNESDAY. \
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+Say you've got a really big program. When you make a change, you have to wait forever to compile. \
+Breaking it up into multiple files lets you just recompile the files you made changes to, not EVERYTHING, EVERY TIME. \
+\
+you've got \
+~~~.cpp	~~~.cpp	~~~.cpp	source files\
+  |		   |		   |		
+\f1\i compiling
+\f0\i0 \
+  V		   V		   V\
+~~~.obj	~~~.obj	~~~.obj	object file	translation of the code, a little bit of extra info about definitions/implementations/etc\
+~~~.o		~~~.o		~~~.o\
+\\		  | 		      /\
+ \\		  |   	     /	
+\f1\i linking
+\f0\i0 		obj files and any library files get "linked"\
+\
+		~~~.exe\
+\
+"header file"\
+~~~.h\
+\
+#include "Circle.h"\
+int main() \{\}\
+\
+#include "Circle.h"\
+Class Circle\
+\{\};\
+double area(___); \
+Circle::Circle(___)\
+\{\}\
+void Circle::scale(__)\
+\{\}\
+\
+\
+They all come with some information about which pieces of the program they have, the linker puts together all the necessary files. \
+\
+Problems:\
+	only one main function!\
+	no identical functions, etc.\
+	errors normally look like\
+		LNK . . . \
+		. . . undefined symbol\
+		multiply-defined symbol\
+\
+Usually, you'll have two files for each class. \
+A header file .h\
+	class declarations, other functions that aren't member functions (maybe helpers)\
+Implementation file .cpp\
+	implementations of construction, functions defined by header\
+\
+things with <____> is mostly innate files, part of the environment and not the application\
+		 "____" are for your files\
+\
+stlib header files don't have .h's in the name in C++ 
+\f1\i currently
+\f0\i0 . Very, very old C++ code may say "#include <iostream.h>", that's now wrong. \
+\
+The order in which you include things MATTERS.\
+\
+#include "Point.h"\
+#include "Circle.h" // if Circle.cpp uses Point.h\
+\
+So, in your header file, you want to include all the things that file would rely on, as in including Point.h in Circle.h. \
+\
+You can't include more than once, though!\
+\
+
+\f2\b "INCLUDE GUARD"
+\f0\b0  		everything in the header file should be encompassed by the if\
+\
+// Point.h\
+\
+#ifndef POINT_INCLUDED 	// you only look at this if the symbol is not already defined\
+#define POINT_INCLUDED\
+\
+\
+#endif	// POINT_INCLUDED\
+\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+FURTHER COMPLICATIONS\
+\
+//Course.h\
+\
+#ifndef Course_h\
+#define Course_h\
+\
+//#include "Student.h"\
+class Student;\
+\
+class Course\
+\{\
+	\'85\
+	Student* m_roster[1000];\
+\};\
+\
+#endif  // Course_h\
+\
+===========================\
+\
+//Student.h\
+\
+#ifndef Student_h\
+#define Student_h\
+\
+//#include "Course.h"\
+class Course;\
+\
+class Student\
+\{\
+	\'85\
+	Course* m_studyList[10];\
+\};\
+\
+#endif  // Student_h\
+\
+
+\f2\b MERDE, "CIRCULAR DEPENDENCY"
+\f0\b0 \
+\
+The solution: C++ doesn't require completely understanding what a class needs in a few situations. \
+If you're using the name of a type to declare a
+\f3\i\b  pointer
+\f0\i0\b0  then that's ok!\
+Just tell the compiler student is the name of a type. \
+\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+If the file Foo.h defines the class Foo, when does another file require you to say\
+	#include "Foo.h"\
+and when can you instead simply provide the incomplete type declaration\
+	class Foo;\
+\
+You have to #include the header file defining a class when \
+* you declare a data member of that class type\
+* you declare a container (e.g. a vector) of objects of that class type\
+* you create an object of that class type\
+* you use a member of that class type\
+\
+class Blah \
+\{\
+	\'85\
+	void g(Foo f, Foo& fr, Foo* fp); 	// just need to say 	class Foo; \
+	\'85\
+	Foo* m_fp; 					// just need to say 	class Foo; \
+	Foo* m_fpa[10];					// just need to say 	class Foo; \
+	vector<Foo> m_fpv;				// just need to say 	class Foo; \
+	\
+	Foo m_f; 						// must #include Foo.h\
+	Foo m_fa[10]; 					// must #include Foo.h\
+	vecotr<Foo> m_fv; 				// must #include Foo.h\
+\};\
+\
+void Blad::g(Foo f, Foo& fr, Foo* fp)\
+\{\
+	Foo f2(10, 20); 					// must #include Foo.h\
+	f.gleep(); 					// must #include Foo.h\
+	fr.gleep();					// must #include Foo.h\
+	fp->gleep(); 					// must #include Foo.h\
+\}\
+\
+Where we can, we try to avoid including the header file. \
+\
+\
+\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+class Circle\
+\{\
+	public:\
+		Circle(double x, double y, double r); \
+		\'85\
+	private:\
+		double m_x; \
+		double m_y; \
+		double m_r; \
+\};\
+\
+class StickFigure\
+\{\
+	public:\
+		StickFigure(double hd, double bl, double hx, double hy, string nm);  // things you need to construct a stick figure		\'85	\
+	private:\
+		Circle m_head; \
+		double m_bodyLength;\
+		string m_name; \
+\};\
+\
+Circle::Circle(double x, double y, double r)\
+ : m_x(x), m_y(y), m_r(r)\
+\{\} // we're not bothering with error checking this time\
+\
+StickFigure::StickFigure(double hd, double bl, double hx, double hy, string nm)\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7923\tx8633\tx9357\tx18525\pardirnatural
+\cf0  : m_head(hx, hy, hd/2), m_name(nm)					// this now compiles!\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \{\
+	m_bodyLength = bl; 							// this could go in either place and make no difference\
+//	m_name = nm; 								// slightly more efficient to put this in the member initialization list \
+//	m_head = ???; // how to set do i?\
+\}\
+\
+// This won't compile yet. \
+// The double would be left uninitialize, members of class type like 'string' would have a constructor called. It would construct the string (to the empty string). \
+// Next up, it tries to call a constructor for Circle. The compiler has nooo clue what constructor to use. It only has one. Still, the constructor doesn't know what to pass it. \
+// Circle doesn't have a default constructor, you're gonna get an error. There is no Circle::Circle(). \
+\
+\
+\
+\
+\
+A compiles goes through three steps when an object is being constructed:\
+\
+1. ____________\
+2. Construct the data members:\
+	a) members of class type are constructed by calling a constructor for that type\
+		i)	the member initialization list tells how\
+		ii)	if the member is not listed in the member initialization list, use the default constructor [error if none]\
+	b) members of a built in type are left uninitialized unless mentioned in the member initialization list\
+3. Anything that's in the body of the constructor is executed\
+\
+\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+class String\
+\{\
+	public:\
+		String(const char* value);\
+		.. . \
+	private:\
+		char* m_text;\
+\};\
+\
+String::String(const char* value)\
+\{\
+	m_text = new char[strlen(value)+1];\
+	strcpy(m_text, value); \
+\}\
+\pard\pardeftab720
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+Let's keep talking resource management.\
+And once again, we're talking about resource management so I'm just going to keep typing here.\
+\
+\
+class String\
+\{\
+	public:\
+		String(const char* value = "");\
+		String(const String& other); \
+		~String();\
+		String& operator=(const String& rhs); \
+\
+	private:\
+		// Class invariant:\
+		// m_len >= 0\
+		// m_text points to a dynamically allocated array of m_len+1 chars\
+		// m_text[m_len] == '\\0'\
+		char* m_text;\
+		int m_len;\
+\};\
+\
+String::String(const char* value)\
+\{\
+	m_len = strlen(value);\
+	m_text = new char[m_len+1];\
+	strcpy(m_text, value); \
+\}\
+\
+String::String(const String& other) // 
+\f2\b copy constructor
+\f0\b0  (takes one argument of the same type as the class it's a member of)\
+\{\
+	m_len = other.m_len; \
+	m_text = new char[m_len+1];\
+	strcpy(m_text, other.m_text);\
+\}\
+\
+String::~String()\
+\{\
+	delete [] m_text;\
+\}\
+\
+// let's write our own!\
+\
+String& String::operator=(const String& rhs)		// making sure all gets assigned correctly, preventing memory leak \
+\{\
+	// excluding z = z\
+	if (this != &rhs)\
+	\{\
+		// handling everything else\
+		delete [] m_text;						// clear the variable\
+		m_len = rhs.m_len;						// assign various parameters\
+		m_text = new char[m_len+1];\
+		strcpy(m_text, rhs.m_text); 		\
+		return *this;							// always ends like this\
+	\}\
+	return *this;\
+\}	\
+\
+void String::swap(String& other)\
+\{\
+	. . . swap the two m_text members . . . \
+	. . . swap the two m_len members . . . \
+\}\
+\
+void f(String& x)\
+\{\
+	String y("Wow");\
+	\'85\
+	y = x; 			// means y.ASSIGN(x); "call a special member function" really, y.operator=(x);\
+	\'85\
+\}\
+\
+// if you don't declare an assignment operator, the compiler writes one for you\
+\
+\
+void h()\
+\{\
+	String s("Hello");\
+	f(s); \
+	\'85\
+\}\
+\
+int main() \
+\{\
+	//String t; \
+	for (\'85)\
+		h(); \
+\}\
+	\
+\pard\pardeftab720
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+\
+\
+\
+\
+/* A THING */\
+void f(int a, double b, int c = 17);\
+\
+void f(int a, double b, int c)\
+\{\
+	\'85.\
+\}\
+\
+// this is cool.\
+\
+\
+\
+__________________________________________________\
+
+\f2\b Constructor
+\f0\b0 \
+1. \'97\'97\'97\'97\
+2. Construct the data members.\
+3. Execute the body of the constructor\
+_________________________\
+
+\f2\b Destructor
+\f0\b0 \
+1. Execute the body of the destructor\
+2. Destroy the data members\
+	a. nothing happens for builtin types\
+	b. members of a class type have their destructor called\
+3. \'97\'97\'97\
+\
+String has its own rad destructor. \
+\
+\
+\
+\
+\
+initialization (call a constructor)\
+an object that did not exist before is given its first value\
+\
+assignment\
+an already existing object is given a new value\
+\
+\
+"aliasing"\
+when you have more than one way of talking about the same object\
+\
+\
+\
+\
+void transfer(Account& to, Account& from, double ant)\
+\{\
+	if (&from != &to)\{\
+		from.debit(amt);			\
+		to.credit(amt);\
+		if (amt >= 10000)\
+			fileForm();\
+	\}	\
+\}\
+\
+\
+\
+\
+"copy-and-swap"\
+\
+\
+________________________________________________________________________________________________________________________________________________________________________________________________________\
+\
+
+\f2\b LINKED LISTS DAY 1/21\
+\
+
+\f0\b0 resizable array \'97 dynamically allocated to some initial size\
+basically, it 'leaves room', as long as you're under capacity, you can wait and only reallocate when you fill up all existing capacity. \
+\
+\
+\
+linked list\
+\
+nodes - the item, and a pointer to the next item in the list\
+\
+head / tail 			front / back\
+\
+\
+\
+struct Node\
+\{\
+	int m_data;\
+	Node* m_next; // This is ok, because it's a pointer. Otherwise it would be ugly and circular.\
+	\
+\};\
+\
+Node* head = nullptr; // Head with a nullptr is a list of 0 items. \
+\
+\
+\
+\
+\
+\
+while (head != nullptr)				// WROOOOONNNGGGG!!!!!!!\
+\{\
+	out << head->m_data << endl;\
+	head = head->m_next;				// you've lost the head!!! not cool! you broke the list as you went along! crazy memory leak!!\
+\} \
+\
+\
+\
+for (Node* p = head; p != nullptr; p++) 	// WRRROOOOONGG!!!\
+	cout << p->m_data << endl;\
+// these aren't consecutive memory addresses! this isn't an array! ++ on a pointer isn't going to work. \
+\
+\
+\
+\
+for (Node* p = head; p != nullptr; p = p->m_next)		// 
+\f2\b this is the way
+\f0\b0 \
+	cout << p->m_data << endl;\
+\
+\
+\
+Node* p; 							// WRRROOOOOONNG!!!1!!\
+while (p->m_next != nullptr)\
+\{\
+	cout << p->m_data << endl;\
+	p = p->m_next; \
+\} // STOPS THE loop one spot too early\
+\
+\
+Anytime you write p->, make sure\
+	p has not been previously given a value\
+	p is not null\
+Make sure the code works for the empty list.\
+\
+\
+Node* p; \
+for (p = head; p->m_data != 37; p = p->m_next)\
+	; // doesn't work if no 37, doesn't work for empty list\
+cout << "p->m_data is " << p->m_data << endl;\
+\
+Node* p; \
+for (p = head; p != nullptr && p->m_data != 37; p = p->m_next)\
+	; 											// now works for null things\
+if (p == nullptr)\
+	out << "There is no 37 in the list" << endl;\
+else\
+	cout << "p->m_data is " << p->m_data << endl;\
+\
+\
+\
+Node* p; \
+for (p = head; p != nullptr && p->m_data != 37; p = p->m_next)\
+	; \
+if (p != nullptr)\
+\{\
+	Node* newly = new Node;\
+	newguy->m_data = 53; \
+	newguy->m_next = p->p_next; \
+	p->m_next = newguy; \
+\}\
+\
+Don't do things in the wrong order.\
+Advice: set values in the new node first.\
+check: normal (middle), empty, one-element, front, back\
+\
+doubly linked lists\
+item\
+pointer to next\
+pointer to previous\
+\
+\
+lecture: linked list supplement\
+2 pages talking about doubly linked lists, etc.\
+\
+\
+\
+________________________________________________________________________________________________________________________________________________________________________________________________________\
+\
+
+\f2\b More data structures\
+\
+
+\f0\b0 x x x x x x x x <->
+\f2\b \
+
+\f0\b0 Stack - all the action is happening at the end\
+A stack of plates on a spring loaded platform in the cafeteria, a stack of boxes\
+	create an empty stack \
+	push an item onto the stack\
+	pop an item off the stack\
+	look at the top item on the stack\
+	is the stack empty?\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97 in some stacks\
+	How many items are in the stack?	\
+	Look at any item in the stack\
+AKA 
+\f1\i LIFO list
+\f0\i0 , Last In First Out \'97 comes in from the business people, via accounting\
+	I'm a widget manufacturer! It costs $10 to make a widget. It's sitting in my warehouse. \
+	Costs have gone up. My unsold widget took $12, now sits in my warehouse. \
+	Same with my $15 widget. \
+	Now I'm selling a widget for $20. I save tax money by selling the most expensive to make widget. Smallest profit now. LIFO accounting scheme. \
+\
+In C++:\
+\
+#include <stack>\
+using namespace std;\
+\
+int main() \
+\{\
+	stack<int> s; // s is a variable that's a type stack of int. default constructor sets up an empty stack. \
+	s.push(10); \
+	s.push(20); \
+	int n = s.top(); // member function top! accessor. n = 20; \
+	s.pop(); // s now contains only 10\
+	// pop doesn't return a value\
+	if (!s.empty())\
+		cout << s.size(); \
+	// that's it! (well, +copy and assignment)\
+\}\
+\
+NOT C++:\
+	int n = s.pop(); // removes and returns top item of stack\
+\
+\
+<-x x x x x x x <- \
+Queue - waiting in a line. (East Coasters say 'on line'?)\
+Used for. . . shared resources (i.e. printers)\
+AKA 
+\f1\i FIFO list, 
+\f0\i0 First In First Out \'97 comes from the business people\
+	create an empty queue\
+	enqueue an item into the queue\
+	dequeue an item from the queue\
+	look at head/front item from queue\
+	is the queue empty?\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97 in some queues\
+	how many items are in the queue?\
+	look at the tail/back of the queue\
+	look at any item in the queue\
+similar error possibilities to the stack (empty queue type errors)\
+\
+In C++:\
+\
+#include <queue>\
+using namespace std;\
+\
+int main() \
+\{\
+	queue<int> q;\
+	q.push(10); // C++ is weird. Everyone else enqueue's. \
+	q.push(20); \
+	int n = q.front(); // n is 10\
+	q.pop(); // q now contains just 20. C++ is weird. Void function, returns no value. \
+	// in some libraries, will return value being dequeued.\
+	if (!q.empty()) \{\
+		cout << q.size(); \
+		n = q.back(); \
+	\}\
+\}	\
+	\
+\
+\
+\
+\
+prefix:\
+	f(a, b, c)\
+ 	add(seb(8, div(6,2)), 1)\
+	+-8/621\
+\
+infix:\
+	8-6/2+1\
+	3*(4-2)  3*4-2 // precedence problems\
+\
+postfix:\
+	862/-1+\
+\
+\
+\
+\
+\
+QUEUE MAGIC\
+\
+circular buffer/array\
+ring buffer\
+\
+conceptualize your array as a loop! the front and back pointers move along the ring, sometimes your data "wraps around"\
+\
+\
+________________________________________________________________________________________________________________________________________________________________________________________________________\
+\
+Let's draw a picture!\
+\
+class Circle\
+\{\'85\
+	void move(double xnew, double ynew); \
+	void draw() const;\
+	\'85\
+	double m_x; \
+	double m_y; \
+	double m_r; \
+\};\
+\
+class Rectangle\
+\{\'85\
+	void move(double xnew, double ynew); \
+	void draw() const;\
+	\'85\
+	double m_x; // reference point (upper left corner) coordinates\
+	double m_y; \
+	double m_dx; // delta x\
+	double m_dy; \
+\}; \
+\
+class Ellipse \
+\{\
+	\'85\
+\}; \
+\
+\
+\
+???? pic[100]; // picture array\
+\
+This picture is a heterogeneous collection!\
+\
+Circle ca[100];\
+Rectange ra[100]; \
+Ellipse ea[100]; \
+\'85\'85\'85\'85\
+\
+for (int k = 0; k < \'85; k ++)\
+	ca[k].draw(); \
+for (int k = 0; k < \'85; k++)\
+	ra[k].draw(); \
+for (int k = 0; k < \'85; k++)\
+	ra[k].draw(); \
+\
+not very good!\
+tedious, not very extensible\
+What if you want to add a new class!? You have to change loads of places in the program!\
+\
+void f(Circle x)\
+\{\
+	x.move(10, 20); \
+	x.draw(); \
+\}\
+\
+void f(Rectangle x)\
+\{\
+	x.move(10, 20); \
+	x.draw(); \
+\} // a lot of duplication!!\
+\
+____________________________________________________\
+\
+BUT WAIT\
+there's something better!\
+I'm having ONE array\
+\
+\
+class Shape \
+\{\
+	void move(double xnew, double ynew); \
+	virtual void draw() const; // Call the appropriate draw function based on type of the complete object\
+	\'85\
+	double m_x; \
+	double m_y; \
+	\
+\}; \
+\
+void Shape::move(double xnew, double ynew) \{\
+	\
+\}\
+\
+\
+class WarningSymbol : public Shape \
+\{\
+	\'85 \
+	void move(double xnew, double ynew); // bad idea!!! creates some weird behavior! sometimes moving would flash, sometimes not b/c shape's move isn't virtual. \
+	virtual void draw() const;\
+\}\
+\
+void WarningSymbol::move(double xnew, double ynew) \{\
+	Shape::move(xnew, ynew); \
+	\'85 flash three times\'85\
+\}\
+\
+class Circle : public Shape\
+\{\'85\
+	Circle(double x, double y, double r); \
+	void move(double xnew, double ynew); \
+	virtual void draw() const \cf2 override\cf0 ; // override is C++11, checks things like discrepancies between functions to be override\
+ 	\'85\
+	double m_x; \
+	double m_y; \
+	double m_r; \
+\};\
+\
+Circle::Circle(double x, double y, double r) \
+: Shape(x, y), m_r(r)\
+\{\
+\
+\}\
+\
+class Rectangle : public Shape\
+\{\'85\
+	void move(double xnew, double ynew); \
+//	virtual void draw() const; // it's ok to repeat virtual here. not necessary if it's in the base class.\
+	virtual void draw() const = 0; // pure virtual function (other languages : abstract function) \'97 this way you don't have to implement it at all. \
+	// if there's a pure virtual func, you can't make straight up Shapes. You can have a Shape that's a rect, but no standalone Shape objects. \
+	// 	\
+	\'85\
+	double m_x; // reference point (upper left corner) coordinates\
+	double m_y; \
+	double m_dx; // delta x\
+	double m_dy; \
+\}; \
+\
+class Ellipse : public Shape\
+\{\'85\
+	\
+\}\
+\
+Shape* pic[100]; \
+pic[0] = new Circle;\
+pic[1] = new Rectangle;\
+pic[2] = new Circle; \
+pic[3] = new Circle;\
+\
+for (int k = 0; k < \'85, k++)\
+	pic[k]->draw(); \
+\
+void f(Shape& x) \
+\{\
+	x.move(10,20); \
+	x.draw(); // virtual fixes this problem\
+\}\
+\
+Derived* => Base*\
+Derived& => Base&\
+\
+When does the decision of which code gets used made?\
+static binding (compile time) vs. dynamic binding (runtime)\
+\
+NEVER attempt to override a non-virtual function. It's legal, but highly unwise. \
+\
+concrete class \'97 you can actually create objects of that type\
+vs. \
+abstract class \'97 you can't reeeally make standalone objects of that type\
+abstract base class (ABC)\
+\
+\
+\
+\
+2/4/15\
+________________________________________________________________________________________________________________________________________________________________________________________________________________\
+\
+class Shape \{\
+public:\
+	Shape(double x, double y); \
+	Shape(); \
+	void move(double x, double y); \
+	virtual void draw() const; \
+	virtual ~Shape() \{\
+		// doesn't need to do anything interesting\
+		// the compiler would write that for you, but it wouldn't be virtual. \
+	\} \
+	//virtual ~Shape = 0; NO. If this isn't implemented, then things won't link. \
+	double x() const \{ return m_x \}; \
+	double y() const \{ return m_y \};\
+	 \
+	\'85\
+private:\
+	double m_x; \
+	double m_y; \
+\}; \
+\
+class Polygon : public Shape \
+\{\
+public:\
+	~Polygon; \
+	\'85\
+private:\
+	Node* m_vertices;\
+\};\
+\
+\
+Shape* sp = new Polygon; \
+\'85\
+\
+
+\f2\b "IF A CLASS IS DESIGNED TO BE A BASE CLASS, DECLARE 
+\f0\b0 AND IMPLEMENT 
+\f2\b A VIRTUAL DESTRUCTOR FOR IT."
+\f0\b0  Or face undefined behavior. No compilation error. Mayyyybe a warning. \
+You probably wan't your destructor to be virtual, b/c otherwise you'll have compiler fuckups. This is even if shape doesn't need a specialized destructor. You just need the virtual table involved. \
+This is an ugly little corner of C++. \
+\
+
+\f2\b Construction
+\f0\b0 \
+1. Construct the base part\
+2. Construct the data members\
+3. Excute the body of the constructor\
+\
+
+\f2\b Destruction\
+
+\f0\b0 1. Execute the body of the destructor\
+2. Destroy the data members\
+3. Destroy the base part\
+
+\f1\i pretty symmetry, eh?\
+
+\f0\i0 \
+
+\f2\b All derived class destructors will call the destructor for shape
+\f0\b0 . It's just gonna happen. \
+\
+____________________________________________________\
+\
+class Device // "interface class" "protocol class"\
+\{public:\
+	virtual ~Device() \{\} \
+	virtual void reset() = 0;\
+	virtual void write(char c) = 0; \
+\};\
+\
+\
+class Modem : public Device\
+\{public:\
+	virtual void reset(); \
+	virtual void write(char c); \
+	\'85\
+\
+\};\
+\
+class BannerDisplay : public Device\
+\{public:\
+	virtual void reset(); \
+	virtual void write(char c); \
+	\'85\
+\}; \
+\
+void writeString(Device& d, string s)\
+\{\
+	d.reset(); \
+	for (int k = 0; k != s.size(); k++)\
+		d.write([s][k]); \
+\}\
+\
+Modem m;\
+writeString(m, "Hello"); \
+\
+\
+THAT'S IT FOR INHERITANCE AND VIRTUAL FUNCTIONS. \
+Polymorphism\
+\
+\
+\
+\
+Sort a Pile of N items\
+if (n >1) \
+\{\
+	divide the pile subpiles of about N/2 items each\
+	sort the left subpile\
+		use this algorithm\
+	sort the right subpile\
+		use this algorithm\
+	merge the two subpiles\
+\}\
+\
+\
+prove the sum of all integers from 1 to N is n(n+1) / 2\
+\
+base case: true for 1\
+sum of all numbers 1 to 1 is (1+1)(1) / 2\
+\
+\
+________________________________________________________________________________________________________\
+\
+void sort(int a[], int b, int e)\
+\{\
+	if (e-b > 1)\
+	\{\
+		int mid = (b+e)/2;\
+		sort(a,b,mid);\
+		sort(a,mid,e); \
+		merge(a,b,mid,e);\
+	\}\
+\}\
+\
+\
+\
+\
+\
+the other way\
+a\
+-------------------------------------\
+|\
+|\
+-------------------------------------\
+\
+\
+bool contains(int a[], int n, int target)\
+\{\
+	if(a[0] == target)\
+		return true\
+	return contains(a+1, n--, target);\
+\}\
+// this can never be false... awk\
+// \
+\
+bool contains(int a[], int n, int target)\
+\{\
+	if (n <= 0) // if array is empty or n is neg\
+		return false;\
+	if(a[0] == target)\
+		return true\
+	return contains(a+1, n--, target);\
+\}\
+\
+\
+\
+Methodologies:\
+\
+divide-and-conquer\
+\
+the first and the rest\
+\
+the last and the rest\
+\
+\
+\
+________________________________________________________________________________________________________\
+\
+
+\f2\b TEMPLATES\
+\
+\
+
+\f0\b0 template<typename T>\
+T minimum(T a, T b)\
+\{\
+	if (a < b)\
+		return a; \
+	else\
+		return b; \
+\}\
+\
+int main() \{\
+	int k; \
+	cin >> k; \
+	cout << minimum(k,10) / 2;\
+	double x;\
+	...\
+	double z= 3 * minimum(x*x, x+10);\
+	...\
+	int z = minimum(0, 3*k - k +4); \
+	...\
+	minimum(k, 3.5); // compilation ERROR!\
+\
+\}
+\f2\b \
+\
+\
+\
+\
+The call must match a template\
+The instantiated template must compile\
+\
+The instantiated template must do the right thing\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+\f0\b0 \
+\
+\
+\
+\
+\
+}
