@@ -21,7 +21,18 @@ private:
 // the same as in the original vector.
 void removeBad(vector<Movie*>& v)
 {
-    
+    // watching x-files with no lights on
+    vector<Movie*> goodies;
+    for (vector<Movie*>::iterator p = v.begin(); p != v.end(); p++)
+    {
+        if ((*p)->rating() > 50)
+        {
+            goodies.push_back(*p);
+        } else {
+            destroyedOnes.push_back((*p)->rating());
+        }
+    }
+    v = goodies;
 }
 
 void test()
