@@ -22,14 +22,18 @@ private:
 // the same as in the original list.
 void removeBad(list<Movie*>& li)
 {
-    vector<int> goodies;
-    for (vector<int>::iterator p = destroyedOnes.begin(); p != destroyedOnes.end(); p++)
+    list<Movie*> goodies;
+    for (list<Movie*>::iterator p = li.begin(); p != li.end(); p++)
     {
-        if (p->rating() > 50)
+        int rating = (*p)->rating();
+        if (rating > 50)
         {
             goodies.push_back(*p);
+        } else {
+            destroyedOnes.push_back(rating);
         }
     }
+    li = goodies;
 }
 
 void test()

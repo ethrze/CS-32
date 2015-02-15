@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		ADA05A121A90853E00DCA4BB /* main2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADA05A111A90853E00DCA4BB /* main2.cpp */; };
 		ADA05A141A9085B500DCA4BB /* main3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADA05A131A9085B500DCA4BB /* main3.cpp */; };
+		ADA05A161A90936600DCA4BB /* main4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADA05A151A90936600DCA4BB /* main4.cpp */; };
 		ADC2F5C11A8BED84001A7DE6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADC2F5C01A8BED84001A7DE6 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		ADA05A111A90853E00DCA4BB /* main2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main2.cpp; sourceTree = "<group>"; };
 		ADA05A131A9085B500DCA4BB /* main3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main3.cpp; sourceTree = "<group>"; };
+		ADA05A151A90936600DCA4BB /* main4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main4.cpp; sourceTree = "<group>"; };
 		ADC2F5BD1A8BED84001A7DE6 /* proj3 warmup */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "proj3 warmup"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADC2F5C01A8BED84001A7DE6 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,6 +66,7 @@
 				ADC2F5C01A8BED84001A7DE6 /* main.cpp */,
 				ADA05A111A90853E00DCA4BB /* main2.cpp */,
 				ADA05A131A9085B500DCA4BB /* main3.cpp */,
+				ADA05A151A90936600DCA4BB /* main4.cpp */,
 			);
 			path = "proj3 warmup";
 			sourceTree = "<group>";
@@ -127,6 +130,7 @@
 				ADA05A141A9085B500DCA4BB /* main3.cpp in Sources */,
 				ADC2F5C11A8BED84001A7DE6 /* main.cpp in Sources */,
 				ADA05A121A90853E00DCA4BB /* main2.cpp in Sources */,
+				ADA05A161A90936600DCA4BB /* main4.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
