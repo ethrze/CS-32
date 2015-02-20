@@ -10,41 +10,19 @@
 class StudentWorld : public GameWorld
 {
 public:
-	StudentWorld(std::string assetDir)
-	 : GameWorld(assetDir)
-	{
-	}
+    StudentWorld(std::string assetDir);
 
-	virtual int init() // necessary
-	{
-		return GWSTATUS_CONTINUE_GAME;
-	}
+    virtual int init();
 
-	virtual int move()
-    // this is basically the 'tick' method
-	{
-		  // This code is here merely to allow the game to build, run, and terminate after hitting enter a few times 
-		decLives();
-		return GWSTATUS_PLAYER_DIED;
-	}
+    virtual int move(); // basically the 'tick' method
 
-	virtual void cleanUp() // necessary
-	{
-	}
+    virtual void cleanUp();
 
 private:
 };
 
 
-//unsigned int getLevel() const;
-//unsigned int getLives() const;
-//void decLives();
-//void incLives();
-//unsigned int getScore() const;
-//void increaseScore(unsigned int howMuch);
-//void setGameStatText(string text);
-//bool getKey(int& value);
-//void playSound(int soundID);
+
 
 
 
