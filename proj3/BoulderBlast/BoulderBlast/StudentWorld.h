@@ -35,4 +35,17 @@ public:
 private:
 };
 
+
+//unsigned int getLevel() const;
+//unsigned int getLives() const;
+//void decLives();
+//void incLives();
+//unsigned int getScore() const;
+//void increaseScore(unsigned int howMuch);
+//void setGameStatText(string text);
+//bool getKey(int& value);
+//void playSound(int soundID);
+
+
+
 #endif // STUDENTWORLD_H_
