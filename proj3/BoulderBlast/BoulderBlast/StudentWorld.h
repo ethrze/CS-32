@@ -15,19 +15,20 @@ public:
 	{
 	}
 
-	virtual int init()
+	virtual int init() // necessary
 	{
 		return GWSTATUS_CONTINUE_GAME;
 	}
 
 	virtual int move()
+    // this is basically the 'tick' method
 	{
 		  // This code is here merely to allow the game to build, run, and terminate after hitting enter a few times 
 		decLives();
 		return GWSTATUS_PLAYER_DIED;
 	}
 
-	virtual void cleanUp()
+	virtual void cleanUp() // necessary
 	{
 	}
 
