@@ -2,6 +2,7 @@
 #define ACTOR_H_
 
 #include "GraphObject.h"
+#include "GameConstants.h"
 
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
@@ -9,8 +10,9 @@
 
 class Actor : public GraphObject {
 public:
-//    Actor()
-//    { }
+    Actor()
+    : GraphObject(IID_WALL, 0, 0, none)
+    { }
     virtual void doSomething() {
         // the actor does something
     }
