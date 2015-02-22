@@ -23,13 +23,30 @@ private:
     
     
 };
-// this is technically all that's specifically required for P1
+
+class Wall : public Actor {
+public:
+    Wall(int sx, int sy)
+    : Actor(IID_WALL, sx, sy)
+    {
+        // the default direction is already NONE
+    }
+    
+    virtual void doSomething() {
+        // that was beautiful.
+    }
+    virtual ~Wall() {}
+    
+};
+
 
 class Player : public Actor {
 public:
-    Player(int sx, int sy)
+    Player(int sx, int sy, Direction startDir)
     : Actor(IID_PLAYER, sx, sy), m_dead(0)
-    { }
+    {
+        setDirection(startDir);
+    }
     
     virtual void doSomething() {
         
