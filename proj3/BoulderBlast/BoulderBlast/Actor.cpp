@@ -23,10 +23,36 @@ void Player::doSomething()
 {
     if (amIDead() != true)
     {
-        if (true) {
+        int ch;
+        if (getWorld()->getKey(ch))
+        {
+            switch(ch)
+            {
+                case KEY_PRESS_LEFT:
+                    
+                    
+                    
+                    
+                    setDirection(left);
+                    break;
+                case KEY_PRESS_RIGHT:
+                    
+                    break;
+                case KEY_PRESS_UP:
+                    
+                    break;
+                case KEY_PRESS_DOWN:
+                    
+                    break;
+                case KEY_PRESS_ESCAPE:
+                    
+                    break;
+                case KEY_PRESS_SPACE:
+                    
+                    break;
+            }
             
         }
-        
     }
     else
     {
@@ -34,10 +60,34 @@ void Player::doSomething()
     }
 }
 
-bool Player::canMove(Direction dir)
+bool Player::canMove(int dx, int dy)
 {
-    
-    return false;
+    int count = 0;
+    vector<Actor*> thisStage = getWorld()->getStage();
+    for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++) // all actors loop
+    {
+        if ((*q)->who() == IID_WALL)
+            count++;
+    }
+    if (count != 0)
+        return false;
+    else
+        return true;
 }
 
 Player::~Player() {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

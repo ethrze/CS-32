@@ -32,7 +32,7 @@ int StudentWorld::move() // this is basically the 'tick' method
     // ask everyone to do something
     // remove dead actors
     
-    for (vector<Actor*>::iterator q = stage.begin(); q != stage.end(); q++) // all actors loop
+    for (vector<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++) // all actors loop
     {
         if (!(*q)->amIDead()) // it's a pointer to a pointer to an actor
         {
@@ -41,8 +41,6 @@ int StudentWorld::move() // this is basically the 'tick' method
             if (m_player->amIDead())
                 return GWSTATUS_PLAYER_DIED;
             
-            
-            
         }
     
     } // end all actors loop
@@ -50,9 +48,7 @@ int StudentWorld::move() // this is basically the 'tick' method
     if (m_player->amIDead())
         return GWSTATUS_PLAYER_DIED;
     
-    
-    
-    decLives();
+//    decLives();
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -92,11 +88,11 @@ int StudentWorld::levelLoader()
             {
                 if (atHand == Level::player) {
                     Actor* bigshot = new Player(c, r, this);
-                    stage.push_back(bigshot);
+                    m_stage.push_back(bigshot);
                     m_player = bigshot;
                 }
                 if (atHand == Level::wall)
-                    stage.push_back(new Wall(c, r, this));
+                    m_stage.push_back(new Wall(c, r, this));
                 
             } // end not empty
         } // end row loop

@@ -26,6 +26,11 @@ public:
     
     virtual GameWorld* getWorld()
     { return world; }
+    
+    virtual vector<Actor*> getStage()
+    {
+        return m_stage;
+    }
 
 //    virtual void updateDisplayText();
     
@@ -36,7 +41,7 @@ private:
 
     std::string assDir;
     
-    std::vector<Actor*> stage;
+    std::vector<Actor*> m_stage;
     
     Actor* m_player;
 };
