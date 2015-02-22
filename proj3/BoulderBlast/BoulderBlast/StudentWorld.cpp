@@ -1,5 +1,7 @@
 #include "StudentWorld.h"
+#include "Level.h"
 #include <string>
+#include <vector>
 using namespace std;
 
 GameWorld* createStudentWorld(string assetDir)
@@ -8,18 +10,23 @@ GameWorld* createStudentWorld(string assetDir)
 }
 
 StudentWorld::StudentWorld(std::string assetDir)
-: GameWorld(assetDir)
+: GameWorld(assetDir), assDir(assetDir)
 {
 }
 
-int StudentWorld::init() // necessary
+int StudentWorld::init()
 {
+    levelLoader();
     return GWSTATUS_CONTINUE_GAME;
 }
 
-int StudentWorld::move()
-// this is basically the 'tick' method
+int StudentWorld::move() // this is basically the 'tick' method
 {
+    // update game status
+    // ask everyone to do something
+    // remove dead actors
+    
+    
 //    // Update the Game Status Line
 //    updateDisplayText(); // update the score/lives/level text at screen top
 //    // The term "actors" refers to all robots, the Player, Goodies, // Boulders, Jewels, Holes, Bullets, the Exit, etc.
@@ -75,10 +82,37 @@ void StudentWorld::cleanUp()
 
 
 
-
-
-
-
+int StudentWorld::levelLoader()
+{
+    
+    std::string curL;
+    curL = "level00.dat";
+    
+    Level lev(assDir);
+    Level::LoadResult result = lev.loadLevel(curL);
+    
+    if (result == Level::load_fail_file_not_found ||
+        result == Level::load_fail_bad_format)
+        return -1; // something bad happened!
+    
+    
+    // otherwise the load was successful and you can access the
+    // contents of the level – here’s an example
+//    int x = 0;
+//    int y = 5;
+//    Level::MazeEntry item = lev.getContentsOf(x, y);
+//    
+//    if (item == Level::player)
+//        cout << "The player should be placed at 0,5 in the maze\n";
+//    x = 10;
+//    y = 7;
+//    item = lev.getContentsOf(x, y);
+//    if (item == Level::wall)
+//        cout << "There should be a wall at 10,7 in the maze\n":
+    
+    // etc
+    return 0; 
+}
 
 
 

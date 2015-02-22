@@ -3,7 +3,9 @@
 
 #include "GameWorld.h"
 #include "GameConstants.h"
+#include "Actor.h"
 #include <string>
+#include <vector>
 
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
@@ -19,14 +21,20 @@ public:
     virtual void cleanUp();
     
     virtual GameWorld* getWorld()
-    {
-        return world;
-    }
+    { return world; }
 
 //    virtual void updateDisplayText();
+    
+    virtual int levelLoader();
 
 private:
     GameWorld* world = this;
+
+    std::string assDir;
+    
+    vector<Actor*> stage;
+    
+    Player* m_player;
 };
 
 
