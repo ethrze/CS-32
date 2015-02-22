@@ -42,12 +42,18 @@ int StudentWorld::move() // this is basically the 'tick' method
                 return GWSTATUS_PLAYER_DIED;
             
             
+            
         }
     
     } // end all actors loop
     
+    if (m_player->amIDead())
+        return GWSTATUS_PLAYER_DIED;
+    
+    
+    
     decLives();
-    return GWSTATUS_PLAYER_DIED;
+    return GWSTATUS_CONTINUE_GAME;
 }
 
 void StudentWorld::cleanUp()
