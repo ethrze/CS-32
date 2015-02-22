@@ -1,7 +1,7 @@
 # CS-32
 CS 32 code and projects. 
 
-All ye current CS32 students lurking here after W15 and thinking about peaking at code. 
+All ye current CS32 students lurking here after W15 and thinking about peeking at code. 
 
 Plagiarizing is bad. Bad things will happen. 
 
