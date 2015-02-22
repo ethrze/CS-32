@@ -12,11 +12,22 @@
 class Actor : public GraphObject {
 public:
     Actor(const int IID, int sx, int sy, GameWorld* world)
-    : GraphObject(IID, sx, sy, none), m_homeworld(world) // the closest you can get to a generic GraphObject
+    : GraphObject(IID, sx, sy, none), m_homeworld(world), m_dead(0) // the closest you can get to a generic GraphObject
     { } // may need to put in checks on sx sy
     
-    virtual void doSomething() {
+    virtual void doSomething()
+    {
         // it's a generic actor, why would it actually do something?
+    }
+    
+    virtual bool amIDead()
+    {
+        return m_dead;
+    }
+    
+    virtual void kill()
+    {
+        m_dead = true;
     }
     
     virtual GameWorld* getWorld()
@@ -28,24 +39,26 @@ public:
     
 private:
     GameWorld* m_homeworld;
+    bool m_dead;
     
 };
 
 class Wall : public Actor {
 public:
     Wall(int sx, int sy, GameWorld* world)
-    : Actor(IID_WALL, sx, sy, world)
+    : Actor(IID_WALL, sx, sy, world), m_dead(0)
     {
-        //setVisible(true); // do we need this on a wall?
+        setVisible(true); // do we need this on a wall?
         // the default direction is already NONE
-        
     }
+    
+    virtual void kill() { } // we don't want walls to be killable, this is a failsafe.
 
-    // Actor's doSomething class already does nothing.
+    // Actor's doSomething class already does nothing. No need to override.
     
     virtual ~Wall();
 private:
-    GameWorld* m_homeworld;
+    bool m_dead;
     
 };
 
@@ -62,13 +75,7 @@ public:
     
     virtual void doSomething();
     
-    virtual bool amIDead() {
-        return m_dead;
-    }
     
-    virtual void kill() {
-        m_dead = true;
-    }
     
     bool canMove(Direction dir);
     
@@ -76,7 +83,6 @@ public:
     
 private:
     bool m_dead;
-    bool m_homeworld;
     
 };
 
