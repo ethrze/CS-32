@@ -20,9 +20,8 @@ int StudentWorld::init() // necessary
 int StudentWorld::move()
 // this is basically the 'tick' method
 {
-    
 //    // Update the Game Status Line
-    updateDisplayText(); // update the score/lives/level text at screen top
+//    updateDisplayText(); // update the score/lives/level text at screen top
 //    // The term "actors" refers to all robots, the Player, Goodies, // Boulders, Jewels, Holes, Bullets, the Exit, etc.
 //    // Give each actor a chance to do something
 //    for each of the actors in the game world {
@@ -67,10 +66,10 @@ void StudentWorld::cleanUp()
 {
 }
 
-void updateDisplayText() {
-    
-    
-}
+//void updateDisplayText() {
+//    
+//    
+//}
 
 // Students:  Add code to this file (if you wish), StudentWorld.h, Actor.h and Actor.cpp
 

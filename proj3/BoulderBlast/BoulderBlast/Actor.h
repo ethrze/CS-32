@@ -11,30 +11,30 @@
 
 class Actor : public GraphObject {
 public:
-    Actor(const int IID, int sx, int sy)
-    : GraphObject(IID, sx, sy, none) // the closest you can get to a generic GraphObject
+    Actor(const int IID, int sx, int sy, GameWorld* world)
+    : GraphObject(IID, sx, sy, none), m_homeworld(world) // the closest you can get to a generic GraphObject
     { } // may need to put in checks on sx sy
     
     virtual void doSomething() {
         // it's a generic actor, why would it actually do something?
     }
     
-    GameWorld* getWorld()
+    virtual GameWorld* getWorld()
     {
-        return StudentWorld::getWorld();
+        return m_homeworld;
     }
     
     virtual ~Actor() {}
     
 private:
-    
+    GameWorld* m_homeworld;
     
 };
 
 class Wall : public Actor {
 public:
-    Wall(int sx, int sy)
-    : Actor(IID_WALL, sx, sy)
+    Wall(int sx, int sy, GameWorld* world)
+    : Actor(IID_WALL, sx, sy, world)
     {
         //setVisible(true); // do we need this on a wall?
         // the default direction is already NONE
@@ -44,14 +44,16 @@ public:
     // Actor's doSomething class already does nothing.
     
     virtual ~Wall();
+private:
+    GameWorld* m_homeworld;
     
 };
 
 
 class Player : public Actor {
 public:
-    Player(int sx, int sy, Direction startDir = right)
-    : Actor(IID_PLAYER, sx, sy), m_dead(0)
+    Player(int sx, int sy, GameWorld* world, Direction startDir = right)
+    : Actor(IID_PLAYER, sx, sy, world), m_dead(0)
     {
         setDirection(startDir);
         // is initialized facing RIGHT
@@ -74,6 +76,7 @@ public:
     
 private:
     bool m_dead;
+    bool m_homeworld;
     
 };
 

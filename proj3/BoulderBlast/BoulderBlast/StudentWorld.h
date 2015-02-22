@@ -23,7 +23,7 @@ public:
         return world;
     }
 
-    virtual void updateDisplayText();
+//    virtual void updateDisplayText();
 
 private:
     GameWorld* world = this;
