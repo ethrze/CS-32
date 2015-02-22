@@ -43,10 +43,18 @@ void Player::doSomething()
                     setDirection(right);
                     break;
                 case KEY_PRESS_UP:
-                    
+                    if (canMove(this->getX(), this->getY()+1))
+                    {
+                        this->moveTo(this->getX(), this->getY()+1);
+                    }
+                    setDirection(up);
                     break;
                 case KEY_PRESS_DOWN:
-                    
+                    if (canMove(this->getX(), this->getY()-1))
+                    {
+                        this->moveTo(this->getX(), this->getY()-1);
+                    }
+                    setDirection(down);
                     break;
                 case KEY_PRESS_ESCAPE:
                     
