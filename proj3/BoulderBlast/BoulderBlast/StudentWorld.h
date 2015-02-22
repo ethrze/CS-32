@@ -7,6 +7,10 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
+class Actor;
+
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
 class StudentWorld : public GameWorld
@@ -28,13 +32,13 @@ public:
     virtual int levelLoader();
 
 private:
-    GameWorld* world = this;
+    StudentWorld* world = this;
 
     std::string assDir;
     
-    vector<Actor*> stage;
+    std::vector<Actor*> stage;
     
-    Player* m_player;
+    Actor* m_player;
 };
 
 
