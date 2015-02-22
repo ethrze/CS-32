@@ -23,23 +23,21 @@ void Player::doSomething()
 {
     if (amIDead() != true)
     {
-        if (getWorld()->getKey
-        
-            }
+        if (true) {
             
+        }
         
-        
-        
-    } else {
+    }
+    else
+    {
         return; // you're dead
     }
 }
 
-Player::~Player() {}
-
 bool Player::canMove(Direction dir)
 {
- 
+    
     return false;
 }
 
+Player::~Player() {}

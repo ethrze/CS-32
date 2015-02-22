@@ -19,7 +19,8 @@ public:
         // it's a generic actor, why would it actually do something?
     }
     
-    GameWorld* getWorld() {
+    GameWorld* getWorld()
+    {
         return StudentWorld::getWorld();
     }
     
@@ -67,14 +68,12 @@ public:
         m_dead = true;
     }
     
-    bool Player::canMove(Direction dir);
+    bool canMove(Direction dir);
     
     virtual ~Player();
     
 private:
     bool m_dead;
-    
-    virtual bool canMove(Direction dir);
     
 };
 
