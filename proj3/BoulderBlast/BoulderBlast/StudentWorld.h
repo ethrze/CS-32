@@ -17,8 +17,14 @@ public:
     virtual int move(); // basically the 'tick' method
 
     virtual void cleanUp();
+    
+    virtual GameWorld* getWorld()
+    {
+        return world;
+    }
 
 private:
+    GameWorld* world = this;
 };
 
 

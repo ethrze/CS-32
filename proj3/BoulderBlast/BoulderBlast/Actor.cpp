@@ -21,11 +21,21 @@ Wall::~Wall() {}
 ////////////////
 void Player::doSomething()
 {
-    
+    if (amIDead() != true)
+    {
+        if (getWorld()->getKey
+        
+            }
+            
+        
+        
+        
+    } else {
+        return; // you're dead
+    }
 }
 
-Player::~Player()
-{}
+Player::~Player() {}
 
 bool Player::canMove(Direction dir)
 {
