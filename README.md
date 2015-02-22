@@ -1,14 +1,8 @@
 # CS-32
 CS 32 code and projects. 
 
-How does a readme even work?
+All ye current CS32 students lurking here after W15 and thinking about peaking at code. 
 
-What is the md filetype?
+Plagiarizing is bad. Bad things will happen. 
 
-Who are we?
-
-What is humanity's purpose?
-
-Did I accidentally make my entire user a repo when I first tried to learn git?
-
-Are we all doomed to make mistakes?
+Also, I'm not very good at this class. Don't say I didn't warn you. 
