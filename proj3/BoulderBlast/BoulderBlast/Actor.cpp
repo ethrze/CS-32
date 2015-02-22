@@ -29,14 +29,18 @@ void Player::doSomething()
             switch(ch)
             {
                 case KEY_PRESS_LEFT:
-                    
-                    
-                    
-                    
+                    if (canMove(this->getX()-1, this->getY()))
+                    {
+                        this->moveTo(this->getX()-1, this->getY());
+                    }
                     setDirection(left);
                     break;
                 case KEY_PRESS_RIGHT:
-                    
+                    if (canMove(this->getX()+1, this->getY()))
+                    {
+                        this->moveTo(this->getX()+1, this->getY());
+                    }
+                    setDirection(right);
                     break;
                 case KEY_PRESS_UP:
                     
@@ -64,15 +68,23 @@ bool Player::canMove(int dx, int dy)
 {
     int count = 0;
     vector<Actor*> thisStage = getWorld()->getStage();
+    if (dx > VIEW_WIDTH || dx < 0)
+        count++;
+    if (dy > VIEW_HEIGHT || dy < 0)
+        count++;
     for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++) // all actors loop
     {
-        if ((*q)->who() == IID_WALL)
+        if ((*q)->who() == IID_WALL && (*q)->getX() == dx && (*q)->getY() == dy)
             count++;
     }
+    
     if (count != 0)
+    {
         return false;
-    else
+    }
+    else {
         return true;
+    }
 }
 
 Player::~Player() {}
