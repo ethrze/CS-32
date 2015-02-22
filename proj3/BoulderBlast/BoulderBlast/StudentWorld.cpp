@@ -19,6 +19,9 @@ StudentWorld::StudentWorld(std::string assetDir)
 int StudentWorld::init()
 {
     levelLoader();
+    // getContentsOf(col, row); 
+
+    
     
     return GWSTATUS_CONTINUE_GAME;
 }
@@ -46,7 +49,7 @@ void updateDisplayText() {
 
 int StudentWorld::levelLoader()
 {
-    
+    // LOAD UP YER LEVEL
     std::string curL;
     curL = "level03.dat";
     
@@ -58,22 +61,33 @@ int StudentWorld::levelLoader()
         return -1; // something bad happened!
     
     
-//     otherwise the load was successful and you can access the
-//     contents of the level – here’s an example
-    int x = 0;
-    int y = 5;
-    Level::MazeEntry item = lev.getContentsOf(x, y);
+    // FILL UP YER VECTOR OF ACTORS
+    for (int c = 0; c < VIEW_WIDTH; c++) // col loop
+    {
+        for (int r = 0; r < VIEW_HEIGHT; r++) // row loop
+        {
+            Level::MazeEntry atHand = lev.getContentsOf(c, r);
+            if (atHand != Level::empty)
+            {
+                if (atHand == Level::player) {
+                    Actor* bigshot = new Player(c, r, this);
+                    stage.push_back(bigshot);
+                    m_player = bigshot;
+                }
+                
+                
+                if (atHand == Level::wall)
+                    stage.push_back(new Wall(c, r, this));
+                
+            } // end not empty
+        } // end row loop
+    } // end col loop
     
-    if (item == Level::player)
-        cout << "The player should be placed at 0,5 in the maze\n";
-    x = 10;
-    y = 7;
-    item = lev.getContentsOf(x, y);
-    if (item == Level::wall)
-        cout << "There should be a wall at 10,7 in the maze\n";
-
-    return 0; 
+    return 0;
 }
+
+
+
 
 
 
