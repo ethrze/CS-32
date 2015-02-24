@@ -113,8 +113,6 @@ bool Player::canMove(int dx, int dy)
 Player::~Player() {}
 
 
-
-
 void Jewel::doSomething()
 {
     if (getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() == this->getY())
@@ -130,6 +128,8 @@ Jewel::~Jewel() {}
 
 void Boulder::doSomething()
 {
+    if (hitPts == 0)
+        kill();
     
 }
 

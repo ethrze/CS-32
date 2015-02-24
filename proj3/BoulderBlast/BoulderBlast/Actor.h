@@ -92,9 +92,13 @@ private:
     
 };
 
-/*          
+
+
+
+
+/*  / / / / / / / / / / / / /
         INANIMATE OBJECTS
-                                */
+    / / / / / / / / / / / / /  */
 
 class Wall : public Actor {
 public:
@@ -135,7 +139,7 @@ private:
 class Boulder : public Actor {
 public:
     Boulder(int sx, int sy, StudentWorld* world)
-    : Actor(IID_BOULDER, sx, sy, world), m_dead(0)
+    : Actor(IID_BOULDER, sx, sy, world), m_dead(0), hitPts(10)
     {
         setVisible(true);
     }
@@ -147,28 +151,10 @@ public:
     virtual ~Boulder();
 private:
     bool m_dead;
+    int hitPts;
 };
 
 
 
 
 #endif // ACTOR_H_
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
