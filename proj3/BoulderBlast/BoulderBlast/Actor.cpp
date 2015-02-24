@@ -113,7 +113,12 @@ Player::~Player() {}
 
 void Jewel::doSomething()
 {
-    
+    if (getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() == this->getY())
+    {
+        this->kill();
+        setVisible(false); // this should probably be temporary
+        // you'll want this to effect POINTS
+    }
 }
 
 Jewel::~Jewel() {}
