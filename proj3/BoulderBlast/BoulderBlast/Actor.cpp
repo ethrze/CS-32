@@ -122,3 +122,11 @@ void Jewel::doSomething()
 }
 
 Jewel::~Jewel() {}
+
+
+void Boulder::doSomething()
+{
+    
+}
+
+Boulder::~Boulder() {}

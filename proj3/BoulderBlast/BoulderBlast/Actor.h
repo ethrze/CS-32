@@ -76,6 +76,11 @@ public:
     
     virtual void doSomething();
     
+//    virtual void getDirection()
+//    {
+//        return this->getDirection();
+//    }
+    
     
     
     bool canMove(int dx, int dy);
@@ -127,6 +132,22 @@ private:
     bool m_dead;
 };
 
+class Boulder : public Actor {
+public:
+    Boulder(int sx, int sy, StudentWorld* world)
+    : Actor(IID_BOULDER, sx, sy, world), m_dead(0)
+    {
+        setVisible(true);
+    }
+    
+    virtual void kill() { m_dead = 1; }
+    
+    virtual void doSomething();
+    
+    virtual ~Boulder();
+private:
+    bool m_dead;
+};
 
 
 

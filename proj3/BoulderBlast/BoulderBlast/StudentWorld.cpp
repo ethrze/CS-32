@@ -109,6 +109,8 @@ int StudentWorld::levelLoader()
                     m_stage.push_back(new Wall(c, r, this));
                 if (atHand == Level::jewel)
                     m_stage.push_back(new Jewel(c, r, this));
+                if (atHand == Level::boulder)
+                    m_stage.push_back(new Boulder(c, r, this));
                 
             } // end not empty
         } // end row loop
