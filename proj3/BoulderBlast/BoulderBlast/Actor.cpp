@@ -93,7 +93,11 @@ bool Player::canMove(int dx, int dy)
         count++;
     for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++) // all actors loop
     {
-        if ((*q)->who() == IID_WALL && (*q)->getX() == dx && (*q)->getY() == dy)
+        // no running through WALL or BOULDER
+        if (((*q)->who() == IID_WALL ||
+            (*q)->who() == IID_BOULDER) &&
+            (*q)->getX() == dx &&
+            (*q)->getY() == dy)
             count++;
     }
     
