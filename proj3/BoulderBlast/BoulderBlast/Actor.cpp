@@ -19,6 +19,11 @@
 //    ACTOR   //
 ////////////////
 
+bool Actor::canMove()
+{
+    return false;
+}
+
 // MOVE FUNCTIONS
 // Only to be used if canMove
 void Actor::moveUp()
@@ -62,32 +67,33 @@ void Player::doSomething()
             switch(ch)
             {
                 case KEY_PRESS_LEFT:
+                    setDirection(left);
                     if (canMove(this->getX()-1, this->getY()))
                     {
                         this->moveTo(this->getX()-1, this->getY());
                     }
-                    setDirection(left);
                     break;
                 case KEY_PRESS_RIGHT:
+                    setDirection(right);
                     if (canMove(this->getX()+1, this->getY()))
                     {
                         this->moveTo(this->getX()+1, this->getY());
                     }
-                    setDirection(right);
                     break;
                 case KEY_PRESS_UP:
+                    setDirection(up);
                     if (canMove(this->getX(), this->getY()+1))
                     {
                         this->moveTo(this->getX(), this->getY()+1);
                     }
-                    setDirection(up);
                     break;
                 case KEY_PRESS_DOWN:
+                    setDirection(down);
                     if (canMove(this->getX(), this->getY()-1))
                     {
                         this->moveTo(this->getX(), this->getY()-1);
                     }
-                    setDirection(down);
+                    
                     break;
                 case KEY_PRESS_ESCAPE:
                     
@@ -114,11 +120,11 @@ bool Player::canMove(int dx, int dy)
         count++;
     for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++) // all actors loop
     {
+        if ((*q)->who() == IID_BOULDER && !(*q)->canMove() && (*q)->getX() == dx && (*q)->getY() == dy)
+            count++;
+        
         // no running through WALL or BOULDER
-        if (((*q)->who() == IID_WALL ||
-            (*q)->who() == IID_BOULDER) &&
-            (*q)->getX() == dx &&
-            (*q)->getY() == dy)
+        if ((*q)->who() == IID_WALL && (*q)->getX() == dx && (*q)->getY() == dy)
             count++;
     }
     
@@ -161,34 +167,41 @@ bool Boulder::canMove()
     vector<Actor*> ourStage = getWorld()->getStage();
     for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
     {
-        if (dir == left)
-        {
-            // ADD HOLE, edge?
-            if ((*q)->who() == IID_WALL && (*q)->getX() == this->getX()-1 && (*q)->getY() == this->getY())
+        if ((*q)->who() == IID_BOULDER || (*q)->who() == IID_WALL) {
+            if (dir == left)
             {
-                count++;
+                // ADD HOLE, edge?
+                if ((*q)->getX() == this->getX()-1 && (*q)->getY() == this->getY())
+                {
+                    count++;
+                }
             }
-        }
-        if (dir == right)
-        {
-            // ADD HOLE, edge
-            if ((*q)->who() == IID_WALL && (*q)->getX() == this->getX()+1 && (*q)->getY() == this->getY())
+            if (dir == right)
             {
-                count++;
+                // ADD HOLE, edge
+                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) &&
+                    (*q)->getX() == this->getX()+1 && (*q)->getY() == this->getY())
+                {
+                    count++;
+                }
             }
-        }
-        if (dir == up)
-        {
-            if ((*q)->who() == IID_WALL && (*q)->getX() == this->getX() && (*q)->getY() == this->getY()-1)
+            if (dir == up)
             {
-                count++;
+                // ADD HOLE, edge
+                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) &&
+                    (*q)->getX() == this->getX() && (*q)->getY() == this->getY()-1)
+                {
+                    count++;
+                }
             }
-        }
-        if (dir == down)
-        {
-            if ((*q)->who() == IID_WALL && (*q)->getX() == this->getX() && (*q)->getY() == this->getY()+1)
+            if (dir == down)
             {
-                count++;
+                // ADD HOLE, edge
+                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) &&
+                    (*q)->getX() == this->getX() && (*q)->getY() == this->getY()+1)
+                {
+                    count++;
+                }
             }
         }
     }

@@ -54,6 +54,8 @@ public:
         return m_IID;
     }
     
+    virtual bool canMove();
+    
     virtual void moveUp();
     
     virtual void moveDown();
@@ -61,7 +63,6 @@ public:
     virtual void moveLeft();
     
     virtual void moveRight();
-    
     
     virtual ~Actor() {}
     
@@ -90,7 +91,7 @@ public:
         return this->getDirection();
     }
     
-    bool canMove(int dx, int dy);
+    virtual bool canMove(int dx, int dy);
     
     virtual ~Player();
     
