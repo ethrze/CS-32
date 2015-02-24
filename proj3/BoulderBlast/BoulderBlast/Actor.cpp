@@ -107,3 +107,13 @@ bool Player::canMove(int dx, int dy)
 }
 
 Player::~Player() {}
+
+
+
+
+void Jewel::doSomething()
+{
+    
+}
+
+Jewel::~Jewel() {}

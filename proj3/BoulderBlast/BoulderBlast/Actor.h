@@ -63,25 +63,6 @@ private:
     
 };
 
-class Wall : public Actor {
-public:
-    Wall(int sx, int sy, StudentWorld* world)
-    : Actor(IID_WALL, sx, sy, world), m_dead(0)
-    {
-        setVisible(true); // do we need this on a wall?
-        // the default direction is already NONE
-    }
-    
-    virtual void kill() { } // we don't want walls to be killable, this is a failsafe.
-
-    // Actor's doSomething class already does nothing. No need to override.
-    
-    virtual ~Wall();
-private:
-    bool m_dead;
-    
-};
-
 
 class Player : public Actor {
 public:
@@ -105,6 +86,49 @@ private:
     bool m_dead;
     
 };
+
+/*          
+        INANIMATE OBJECTS
+                                */
+
+class Wall : public Actor {
+public:
+    Wall(int sx, int sy, StudentWorld* world)
+    : Actor(IID_WALL, sx, sy, world), m_dead(0)
+    {
+        setVisible(true); // do we need this on a wall?
+        // the default direction is already NONE
+    }
+    
+    virtual void kill() { } // we don't want walls to be killable, this is a failsafe.
+    
+    // Actor's doSomething class already does nothing. No need to override.
+    
+    virtual ~Wall();
+private:
+    bool m_dead;
+    
+};
+
+class Jewel : public Actor {
+public:
+    Jewel(int sx, int sy, StudentWorld* world)
+    :Actor(IID_JEWEL, sx, sy, world), m_dead(0)
+    {
+        setVisible(true);
+    }
+    
+    virtual void kill() { m_dead = 1; }
+    
+    virtual void doSomething();
+    
+    virtual ~Jewel();
+private:
+    bool m_dead;
+};
+
+
+
 
 
 #endif // ACTOR_H_

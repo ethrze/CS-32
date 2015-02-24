@@ -62,9 +62,4 @@ private:
     Actor* m_player;
 };
 
-
-
-
-
-
 #endif // STUDENTWORLD_H_
