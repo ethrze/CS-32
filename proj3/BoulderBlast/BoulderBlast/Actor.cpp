@@ -162,52 +162,16 @@ void Boulder::doSomething()
 
 bool Boulder::canMove()
 {
-    int count = 0;
-    Direction dir = getWorld()->getPlayer()->getDirection();
+//    int count = 0;
+//    Direction dir = getWorld()->getPlayer()->getDirection();
     vector<Actor*> ourStage = getWorld()->getStage();
-    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
     {
-        if ((*q)->who() == IID_BOULDER || (*q)->who() == IID_WALL) {
-            if (dir == left)
-            {
-                // ADD HOLE, edge?
-                if ((*q)->getX() == this->getX()-1 && (*q)->getY() == this->getY())
-                {
-                    count++;
-                }
-            }
-            if (dir == right)
-            {
-                // ADD HOLE, edge
-                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) &&
-                    (*q)->getX() == this->getX()+1 && (*q)->getY() == this->getY())
-                {
-                    count++;
-                }
-            }
-            if (dir == up)
-            {
-                // ADD HOLE, edge
-                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) &&
-                    (*q)->getX() == this->getX() && (*q)->getY() == this->getY()-1)
-                {
-                    count++;
-                }
-            }
-            if (dir == down)
-            {
-                // ADD HOLE, edge
-                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) &&
-                    (*q)->getX() == this->getX() && (*q)->getY() == this->getY()+1)
-                {
-                    count++;
-                }
-            }
-        }
+        
+        
+        
     }
-    if (count != 0)
-        return false;
-    return true;
+    return false;
 }
 
 Boulder::~Boulder() {}
