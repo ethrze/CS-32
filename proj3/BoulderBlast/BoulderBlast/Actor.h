@@ -155,6 +155,8 @@ public:
     
     virtual void doSomething();
     
+    virtual bool canMove(); 
+    
     virtual ~Boulder();
 private:
     bool m_dead;

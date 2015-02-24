@@ -18,24 +18,27 @@
 ////////////////
 //    ACTOR   //
 ////////////////
+
+// MOVE FUNCTIONS
+// Only to be used if canMove
 void Actor::moveUp()
 {
-    
+    this->moveTo(this->getX()+1, this->getY());
 }
 
 void Actor::moveDown()
 {
-    
+    this->moveTo(this->getX()-1, this->getY());
 }
 
 void Actor::moveLeft()
 {
-    
+    this->moveTo(this->getX(), this->getY()-1);
 }
 
 void Actor::moveRight()
 {
-    
+    this->moveTo(this->getX(), this->getY()+1);
 }
 
 
@@ -151,4 +154,51 @@ void Boulder::doSomething()
     
 }
 
+bool Boulder::canMove()
+{
+    int count = 0;
+    Direction dir = getWorld()->getPlayer()->getDirection();
+    vector<Actor*> ourStage = getWorld()->getStage();
+    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+    {
+        if (dir == left)
+        {
+            // ADD HOLE, edge?
+            if ((*q)->who() == IID_WALL && (*q)->getX() == this->getX()-1 && (*q)->getY() == this->getY())
+            {
+                count++;
+            }
+        }
+        if (dir == right)
+        {
+            // ADD HOLE, edge
+            if ((*q)->who() == IID_WALL && (*q)->getX() == this->getX()+1 && (*q)->getY() == this->getY())
+            {
+                count++;
+            }
+        }
+        if (dir == up)
+        {
+            if ((*q)->who() == IID_WALL && (*q)->getX() == this->getX() && (*q)->getY() == this->getY()-1)
+            {
+                count++;
+            }
+        }
+        if (dir == down)
+        {
+            if ((*q)->who() == IID_WALL && (*q)->getX() == this->getX() && (*q)->getY() == this->getY()+1)
+            {
+                count++;
+            }
+        }
+    }
+    if (count != 0)
+        return false;
+    return true;
+}
+
 Boulder::~Boulder() {}
+
+
+
+
