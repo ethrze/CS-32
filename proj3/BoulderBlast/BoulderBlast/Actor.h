@@ -54,6 +54,15 @@ public:
         return m_IID;
     }
     
+    virtual void moveUp();
+    
+    virtual void moveDown();
+    
+    virtual void moveLeft();
+    
+    virtual void moveRight();
+    
+    
     virtual ~Actor() {}
     
 private:
@@ -76,12 +85,10 @@ public:
     
     virtual void doSomething();
     
-//    virtual void getDirection()
-//    {
-//        return this->getDirection();
-//    }
-    
-    
+    virtual void getDirection()
+    {
+        return this->getDirection();
+    }
     
     bool canMove(int dx, int dy);
     

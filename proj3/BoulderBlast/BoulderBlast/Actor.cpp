@@ -18,7 +18,25 @@
 ////////////////
 //    ACTOR   //
 ////////////////
+void Actor::moveUp()
+{
+    
+}
 
+void Actor::moveDown()
+{
+    
+}
+
+void Actor::moveLeft()
+{
+    
+}
+
+void Actor::moveRight()
+{
+    
+}
 
 
 ////////////////
