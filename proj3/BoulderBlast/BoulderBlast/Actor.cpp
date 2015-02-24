@@ -12,12 +12,7 @@
 //      $$ |   $$ |  $$ |$$ |_____       $$ |$$$/ $$ |$$ |  $$ | _$$ |_ $$ |$$$$ |
 //      $$ |   $$ |  $$ |$$       |      $$ | $/  $$ |$$ |  $$ |/ $$   |$$ | $$$ |
 //      $$/    $$/   $$/ $$$$$$$$/       $$/      $$/ $$/   $$/ $$$$$$/ $$/   $$/
-//
-
-
-
-
-
+// Giant ASCII art makes sure I know which file I'm in. The other file says "the other file." Very adept.
 
 
 ////////////////
@@ -80,7 +75,6 @@ void Player::doSomething()
                     
                     break;
             }
-            
         }
     }
     else
@@ -113,18 +107,3 @@ bool Player::canMove(int dx, int dy)
 }
 
 Player::~Player() {}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

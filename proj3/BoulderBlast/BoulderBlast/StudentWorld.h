@@ -38,6 +38,11 @@ public:
     virtual GameWorld* getWorld()
     { return world; }
     
+    virtual Actor* getPlayer()
+    {
+        return m_player;
+    }
+    
     virtual vector<Actor*> getStage()
     {
         return m_stage;
