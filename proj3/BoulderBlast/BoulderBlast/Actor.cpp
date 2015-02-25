@@ -297,8 +297,9 @@ void Hole::doSomething()
     vector<Actor*> ourStage = getWorld()->getStage();
     for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
     {
-        if (this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
+        if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
         {
+            cout << "got in here" << endl;
             this->kill();
             (*q)->kill(); 
         }
