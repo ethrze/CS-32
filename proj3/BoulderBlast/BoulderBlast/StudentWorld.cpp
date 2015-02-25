@@ -46,6 +46,9 @@ int StudentWorld::move() // this is basically the 'tick' method
     // ask everyone to do something
     // remove dead actors
     
+    //update display text
+    
+    // give each character the chance to do something
     for (vector<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++) // all actors loop
     {
         if (!(*q)->amIDead()) // it's a pointer to a pointer to an actor
@@ -54,15 +57,27 @@ int StudentWorld::move() // this is basically the 'tick' method
             
             if (m_player->amIDead())
                 return GWSTATUS_PLAYER_DIED;
+            // if completed level
+                // increase score
+                // return GWSTATUS_FINISHED_LEVEL
             
         }
-    
     } // end all actors loop
+    
+    // remove dead game objects
+    removeDeadGameObjects();
+    
+    // reduce level bonus by one
+    
+    // if player has collected all jewels
+        // expose exit
     
     if (m_player->amIDead())
         return GWSTATUS_PLAYER_DIED;
+    // if completed level
+    // increase score
+    // return GWSTATUS_FINISHED_LEVEL
     
-//    decLives();
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -114,6 +129,8 @@ int StudentWorld::levelLoader()
                 // boulder
                 if (atHand == Level::boulder)
                     m_stage.push_back(new Boulder(c, r, this));
+                if (atHand == Level::hole)
+                    m_stage.push_back(new Hole(c, r, this)); 
 
                 
             } // end not empty
@@ -123,7 +140,14 @@ int StudentWorld::levelLoader()
     return 0;
 }
 
-
+void StudentWorld::removeDeadGameObjects()
+{
+    for (vector<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++)
+    {
+        if ((*q)->amIDead())
+            delete (*q);
+    }
+}
 
 
 

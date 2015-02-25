@@ -193,6 +193,26 @@ public:
 private:
     bool m_dead;
 };
+// / / / / / / / / / / //
+//         HOLE        //  isn't even a great band...
+// / / / / / / / / / / //
+class Hole : public Actor {
+public:
+    Hole(int sx, int sy, StudentWorld* world)
+    : Actor(IID_HOLE, sx, sy, world), m_dead(0)
+    {
+        setVisible(true);
+    }
+    
+    virtual void kill() { m_dead = true; }
+    
+    virtual void doSomething();
+    
+    virtual ~Hole();
+private:
+    bool m_dead;
+};
+
 
 
 

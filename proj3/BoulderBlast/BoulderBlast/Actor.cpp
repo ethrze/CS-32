@@ -168,7 +168,7 @@ bool Player::canMove(Direction dir)
         {
             if (yRow + 1 >= VIEW_HEIGHT)
                 count++;
-            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
+            if (((*q)->who() == IID_WALL || (*q)->who() == IID_HOLE) && (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow+1 && (*q)->getX() == xCol && !(*q)->canMove(up))
                 count++;
@@ -177,7 +177,7 @@ bool Player::canMove(Direction dir)
         {
             if (yRow - 1 < 0)
                 count++;
-            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
+            if (((*q)->who() == IID_WALL || (*q)->who() == IID_HOLE) && (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow-1 && (*q)->getX() == xCol && !(*q)->canMove(down))
                 count++;
@@ -186,7 +186,7 @@ bool Player::canMove(Direction dir)
         {
             if (xCol - 1 < 0)
                 count++;
-            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+            if (((*q)->who() == IID_WALL || (*q)->who() == IID_HOLE) && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1 && !(*q)->canMove(left))
                 count++;
@@ -195,7 +195,7 @@ bool Player::canMove(Direction dir)
         {
             if (xCol + 1 >= VIEW_WIDTH)
                 count++;
-            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+            if (((*q)->who() == IID_WALL || (*q)->who() == IID_HOLE) && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1 && !(*q)->canMove(right))
                 count++;
@@ -291,6 +291,26 @@ void Bullet::doSomething()
 }
 
 Bullet::~Bullet() {}
+
+void Hole::doSomething()
+{
+    vector<Actor*> ourStage = getWorld()->getStage();
+    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+    {
+        if (this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
+        {
+            this->kill();
+            (*q)->kill(); 
+        }
+    }
+
+    
+}
+
+Hole::~Hole()
+{
+    
+}
 
 
 

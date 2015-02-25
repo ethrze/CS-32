@@ -47,6 +47,8 @@ public:
     {
         return m_stage;
     }
+    
+    virtual void removeDeadGameObjects();
 
 //    virtual void updateDisplayText();
     
