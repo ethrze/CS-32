@@ -111,7 +111,7 @@ void Player::doSomething()
                         for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
                         {
                             if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() &&
-                                this->getY() == (*q)->getY()+1)
+                                this->getY() == (*q)->getY()-1)
                             {
                                 if ((*q)->canMove(up) && this->canMove(up))
                                     (*q)->moveUp();
@@ -127,7 +127,7 @@ void Player::doSomething()
                         for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
                         {
                             if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() &&
-                                this->getY() == (*q)->getY()-1)
+                                this->getY() == (*q)->getY()+1)
                             {
                                 if ((*q)->canMove(down) && this->canMove(down))
                                     (*q)->moveDown();
@@ -145,9 +145,7 @@ void Player::doSomething()
                     case KEY_PRESS_SPACE:
                         
                         break;
-                        //                }
                 }
-                
             }
         }
     }
@@ -208,33 +206,6 @@ bool Player::canMove(Direction dir)
     return true;
 }
 
-
-//bool Player::canMove(int dx, int dy)
-//{
-//    int count = 0;
-//    vector<Actor*> thisStage = getWorld()->getStage();
-//    if (dx > VIEW_WIDTH || dx < 0)
-//        count++;
-//    if (dy > VIEW_HEIGHT || dy < 0)
-//        count++;
-//    for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++) // all actors loop
-//    {
-//        if ((*q)->who() == IID_BOULDER && !(*q)->canMove() && (*q)->getX() == dx && (*q)->getY() == dy)
-//            count++;
-//        
-//        // no running through WALL or BOULDER
-//        if ((*q)->who() == IID_WALL && (*q)->getX() == dx && (*q)->getY() == dy)
-//            count++;
-//    }
-//    
-//    if (count != 0)
-//    {
-//        return false;
-//    }
-//    else {
-//        return true;
-//    }
-//}
 
 Player::~Player() {}
 
