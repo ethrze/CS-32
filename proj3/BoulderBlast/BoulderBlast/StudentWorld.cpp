@@ -114,6 +114,7 @@ int StudentWorld::levelLoader()
                 // boulder
                 if (atHand == Level::boulder)
                     m_stage.push_back(new Boulder(c, r, this));
+
                 
             } // end not empty
         } // end row loop

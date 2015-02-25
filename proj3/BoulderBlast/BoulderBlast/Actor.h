@@ -54,7 +54,7 @@ public:
         return m_IID;
     }
     
-    virtual bool canMove();
+    virtual bool canMove(Direction dir);
     
     virtual void moveUp();
     
@@ -91,7 +91,8 @@ public:
         return this->getDirection();
     }
     
-    virtual bool canMove(int dx, int dy);
+//    virtual bool canMove(int dx, int dy);
+    virtual bool canMove(Direction dir); 
     
     virtual ~Player();
     
@@ -108,6 +109,10 @@ private:
         INANIMATE OBJECTS
     / / / / / / / / / / / / /  */
 
+
+// / / / / / / / / / / //
+//         WALL        //
+// / / / / / / / / / / //
 class Wall : public Actor {
 public:
     Wall(int sx, int sy, StudentWorld* world)
@@ -126,7 +131,9 @@ private:
     bool m_dead;
     
 };
-
+// / / / / / / / / / / //
+//        JEWEL        //
+// / / / / / / / / / / //
 class Jewel : public Actor {
 public:
     Jewel(int sx, int sy, StudentWorld* world)
@@ -143,7 +150,9 @@ public:
 private:
     bool m_dead;
 };
-
+// / / / / / / / / / / //
+//       BOULDER       //
+// / / / / / / / / / / //
 class Boulder : public Actor {
 public:
     Boulder(int sx, int sy, StudentWorld* world)
@@ -156,12 +165,33 @@ public:
     
     virtual void doSomething();
     
-    virtual bool canMove(); 
+    virtual bool canMove(Direction dir);
     
     virtual ~Boulder();
 private:
     bool m_dead;
     int hitPts;
+};
+// / / / / / / / / / / //
+//        BULLET       //
+// / / / / / / / / / / //
+class Bullet : public Actor {
+public:
+    Bullet(int sx, int sy, StudentWorld* world, Direction dir)
+    : Actor(IID_BULLET, sx, sy, world), m_dead(0)
+    {
+        setVisible(true);
+        setDirection(dir);
+    }
+    
+    virtual void kill() { m_dead = 1; }
+    
+    virtual void doSomething();
+    
+    virtual ~Bullet();
+    
+private:
+    bool m_dead;
 };
 
 
