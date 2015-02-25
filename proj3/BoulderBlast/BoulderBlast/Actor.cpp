@@ -1,5 +1,6 @@
 #include "Actor.h"
 #include "StudentWorld.h"
+#include <iostream>
 
 // Students:  Add code to this file (if you wish), Actor.h, StudentWorld.h, and StudentWorld.cpp
 
@@ -28,22 +29,22 @@ bool Actor::canMove(Direction dir)
 // Only to be used if canMove
 void Actor::moveUp()
 {
-    this->moveTo(this->getX()+1, this->getY());
+    this->moveTo(this->getX(), this->getY()+1);
 }
 
 void Actor::moveDown()
 {
-    this->moveTo(this->getX()-1, this->getY());
+    this->moveTo(this->getX(), this->getY()-1);
 }
 
 void Actor::moveLeft()
 {
-    this->moveTo(this->getX(), this->getY()-1);
+    this->moveTo(this->getX()-1, this->getY());
 }
 
 void Actor::moveRight()
 {
-    this->moveTo(this->getX(), this->getY()+1);
+    this->moveTo(this->getX()+1, this->getY());
 }
 
 
@@ -62,49 +63,91 @@ void Player::doSomething()
     if (amIDead() != true)
     {
         int ch;
-        if (getWorld()->getKey(ch))
+        vector<Actor*> thisStage = getWorld()->getStage();
+        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
         {
-            switch(ch)
+            if (getWorld()->getKey(ch))
             {
-                case KEY_PRESS_LEFT:
-                    setDirection(left);
-                    if (canMove(left))
-//                    if (canMove(this->getX()-1, this->getY()))
-                    {
-                        this->moveTo(this->getX()-1, this->getY());
-                    }
-                    break;
-                case KEY_PRESS_RIGHT:
-                    setDirection(right);
-                    if (canMove(right))
-//                    if (canMove(this->getX()+1, this->getY()))
-                    {
-                        this->moveTo(this->getX()+1, this->getY());
-                    }
-                    break;
-                case KEY_PRESS_UP:
-                    setDirection(up);
-//                    if (canMove(this->getX(), this->getY()+1))
-                    if (canMove(up))
-                    {
-                        this->moveTo(this->getX(), this->getY()+1);
-                    }
-                    break;
-                case KEY_PRESS_DOWN:
-                    setDirection(down);
-//                    if (canMove(this->getX(), this->getY()-1))
-                    if (canMove(down))
-                    {
-                        this->moveTo(this->getX(), this->getY()-1);
-                    }
-                    
-                    break;
-                case KEY_PRESS_ESCAPE:
-                    
-                    break;
-                case KEY_PRESS_SPACE:
-                    
-                    break;
+                //                for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                //                {
+                switch(ch)
+                {
+                    case KEY_PRESS_LEFT:
+                        setDirection(left);
+                        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                        {
+                            if ((*q)->who() == IID_BOULDER && this->getX()-1 == (*q)->getX() &&
+                                this->getY() == (*q)->getY())
+                            {
+                                if ((*q)->canMove(left) && this->canMove(left))
+                                    (*q)->moveLeft();
+                            }
+                        }
+                        if (canMove(left))
+                        {
+                            this->moveLeft();
+                        }
+                        
+                        break;
+                    case KEY_PRESS_RIGHT:
+                        setDirection(right);
+                        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                        {
+                            if ((*q)->who() == IID_BOULDER && this->getX()+1 == (*q)->getX() &&
+                                this->getY() == (*q)->getY())
+                            {
+                                if ((*q)->canMove(right) && this->canMove(right))
+                                    (*q)->moveRight();
+                            }
+                        }
+                        if (canMove(right))
+                        {
+                            this->moveRight();
+                        }
+                        break;
+                    case KEY_PRESS_UP:
+                        setDirection(up);
+                        // THIS IS HOW WE MOVE BOULDERS
+                        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                        {
+                            if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() &&
+                                this->getY() == (*q)->getY()+1)
+                            {
+                                if ((*q)->canMove(up) && this->canMove(up))
+                                    (*q)->moveUp();
+                            }
+                        }
+                        if (canMove(up))
+                        {
+                            this->moveUp();
+                        }
+                        break;
+                    case KEY_PRESS_DOWN:
+                        setDirection(down);
+                        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                        {
+                            if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() &&
+                                this->getY() == (*q)->getY()-1)
+                            {
+                                if ((*q)->canMove(down) && this->canMove(down))
+                                    (*q)->moveDown();
+                            }
+                        }
+                        if (canMove(down))
+                        {
+                            this->moveDown();
+                        }
+                        
+                        break;
+                    case KEY_PRESS_ESCAPE:
+                        
+                        break;
+                    case KEY_PRESS_SPACE:
+                        
+                        break;
+                        //                }
+                }
+                
             }
         }
     }
@@ -220,18 +263,52 @@ void Boulder::doSomething()
 
 bool Boulder::canMove(Direction dir)
 {
-    //    int count = 0;
-//    Direction dir = getWorld()->getPlayer()->getDirection();
+    int count = 0;
+    int xCol = this->getX();
+    int yRow = this->getY();
     vector<Actor*> ourStage = getWorld()->getStage();
     for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
     {
-        
-        
-        
-        
-        
+        if (dir == up)
+        {
+            if (yRow + 1 >= VIEW_HEIGHT)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
+                count++;
+        }
+        if (dir == down)
+        {
+            if (yRow - 1 < 0)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
+                count++;
+        }
+        if (dir == left)
+        {
+            if (xCol - 1 < 0)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                count++;
+        }
+        if (dir == right)
+        {
+            if (xCol + 1 >= VIEW_WIDTH)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                count++;
+        }
     }
-    return false;
+    if (count != 0)
+        return false;
+    return true;
 }
 
 Boulder::~Boulder() {}
