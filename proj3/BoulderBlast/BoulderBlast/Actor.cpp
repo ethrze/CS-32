@@ -168,36 +168,44 @@ bool Player::canMove(Direction dir)
         {
             if (yRow + 1 >= VIEW_HEIGHT)
                 count++;
-            if (((*q)->who() == IID_WALL || (*q)->who() == IID_HOLE) && (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
+            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead())) &&
+                (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
                 count++;
-            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow+1 && (*q)->getX() == xCol && !(*q)->canMove(up))
+            if ((*q)->who() == IID_BOULDER  && !(*q)->amIDead() &&
+                (*q)->getY() == yRow+1 && (*q)->getX() == xCol && !(*q)->canMove(up))
                 count++;
         }
         if (dir == down)
         {
             if (yRow - 1 < 0)
                 count++;
-            if (((*q)->who() == IID_WALL || (*q)->who() == IID_HOLE) && (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
+            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead())) &&
+                (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
                 count++;
-            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow-1 && (*q)->getX() == xCol && !(*q)->canMove(down))
+            if ((*q)->who() == IID_BOULDER  && !(*q)->amIDead() &&
+                (*q)->getY() == yRow-1 && (*q)->getX() == xCol && !(*q)->canMove(down))
                 count++;
         }
         if (dir == left)
         {
             if (xCol - 1 < 0)
                 count++;
-            if (((*q)->who() == IID_WALL || (*q)->who() == IID_HOLE) && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead())) &&
+                (*q)->getY() == yRow && (*q)->getX() == xCol-1)
                 count++;
-            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1 && !(*q)->canMove(left))
+            if ((*q)->who() == IID_BOULDER  && !(*q)->amIDead() &&
+                (*q)->getY() == yRow && (*q)->getX() == xCol-1 && !(*q)->canMove(left))
                 count++;
         }
         if (dir == right)
         {
             if (xCol + 1 >= VIEW_WIDTH)
                 count++;
-            if (((*q)->who() == IID_WALL || (*q)->who() == IID_HOLE) && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead())) &&
+                (*q)->getY() == yRow && (*q)->getX() == xCol+1)
                 count++;
-            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1 && !(*q)->canMove(right))
+            if ((*q)->who() == IID_BOULDER && !(*q)->amIDead() &&
+                (*q)->getY() == yRow && (*q)->getX() == xCol+1 && !(*q)->canMove(right))
                 count++;
         }
     }
@@ -299,7 +307,6 @@ void Hole::doSomething()
     {
         if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
         {
-            cout << "got in here" << endl;
             this->kill();
             (*q)->kill(); 
         }

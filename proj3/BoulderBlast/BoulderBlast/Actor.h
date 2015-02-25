@@ -161,7 +161,7 @@ public:
         setVisible(true);
     }
     
-    virtual void kill() { m_dead = 1; }
+    virtual void kill() { m_dead = 1; setVisible(false); }
     
     virtual void doSomething();
     
@@ -204,7 +204,7 @@ public:
         setVisible(true);
     }
     
-    virtual void kill() { m_dead = true; }
+    virtual void kill() { m_dead = true; setVisible(false); }
     
     virtual void doSomething();
     
