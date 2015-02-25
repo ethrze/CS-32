@@ -129,9 +129,11 @@ int StudentWorld::levelLoader()
                 // boulder
                 if (atHand == Level::boulder)
                     m_stage.push_back(new Boulder(c, r, this));
+                // hole
                 if (atHand == Level::hole)
                     m_stage.push_back(new Hole(c, r, this)); 
 
+                
                 
             } // end not empty
         } // end row loop
@@ -144,13 +146,13 @@ void StudentWorld::removeDeadGameObjects()
 {
     for (vector<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++)
     {
-        if ((*q)->amIDead())
+        if ((*q)->amIDead() == true)
+        {
             delete (*q);
+            m_stage.erase(q);
+        }
     }
 }
-
-
-
 
 
 

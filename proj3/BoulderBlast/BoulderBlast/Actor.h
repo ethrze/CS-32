@@ -4,6 +4,8 @@
 #include "GraphObject.h"
 #include "StudentWorld.h"
 #include "GameConstants.h"
+#include <iostream>
+using namespace std;
 
 //    ________  __    __  ________        __       __   ______   ______  __    __
 //   /        |/  |  /  |/        |      /  \     /  | /      \ /      |/  \  /  |
@@ -161,11 +163,13 @@ public:
         setVisible(true);
     }
     
-    virtual void kill() { m_dead = 1; setVisible(false); }
+    virtual void kill() { m_dead = 1; }
     
     virtual void doSomething();
     
     virtual bool canMove(Direction dir);
+    
+    virtual bool amIDead() { return m_dead; }
     
     virtual ~Boulder();
 private:
@@ -204,9 +208,11 @@ public:
         setVisible(true);
     }
     
-    virtual void kill() { m_dead = true; setVisible(false); }
+    virtual void kill() { m_dead = true; }
     
     virtual void doSomething();
+    
+    virtual bool amIDead() { return m_dead; }
     
     virtual ~Hole();
 private:

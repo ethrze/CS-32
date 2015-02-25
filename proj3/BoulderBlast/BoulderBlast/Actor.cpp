@@ -307,12 +307,10 @@ void Hole::doSomething()
     {
         if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
         {
+            (*q)->kill();
             this->kill();
-            (*q)->kill(); 
         }
     }
-
-    
 }
 
 Hole::~Hole()
