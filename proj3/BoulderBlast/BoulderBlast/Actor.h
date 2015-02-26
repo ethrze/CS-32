@@ -82,7 +82,7 @@ private:
 class Player : public Actor {
 public:
     Player(int sx, int sy, StudentWorld* world, Direction startDir = right)
-    : Actor(IID_PLAYER, sx, sy, world), m_dead(0)
+    : Actor(IID_PLAYER, sx, sy, world), m_dead(0), m_ammo(20), m_health(20)
     {
         setDirection(startDir);
         // is initialized facing RIGHT
