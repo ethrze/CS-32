@@ -226,6 +226,7 @@ void Jewel::doSomething()
         setVisible(false); // this should probably be temporary
         // you'll want this to effect POINTS
         getWorld()->incScore(20);
+        cerr << "Once" << endl;
     }
 }
 

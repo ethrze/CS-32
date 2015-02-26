@@ -47,6 +47,7 @@ int StudentWorld::move() // this is basically the 'tick' method
     // remove dead actors
     
     //update display text
+    updateDisplayText();
     
     // give each character the chance to do something
     for (vector<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++) // all actors loop
@@ -68,6 +69,7 @@ int StudentWorld::move() // this is basically the 'tick' method
     removeDeadGameObjects();
     
     // reduce level bonus by one
+    decLevBonus();
     
     // if player has collected all jewels
         // expose exit
@@ -95,15 +97,13 @@ void StudentWorld::updateDisplayText() {
     string perfString = "Score: " + to_string(score) + " Level: " + to_string(level) + " Lives: " + to_string(livesLeft) + " Health: " + to_string(m_player->getHealth()) + "% Ammo: " + to_string(m_player->getAmmo()) + " Bonus: " + to_string(bonus);
     setGameStatText(perfString);
     
-    //setGameStatText(perfString);
-    
 }
 
 int StudentWorld::levelLoader()
 {
     // LOAD UP YER LEVEL
     std::string curL;
-    curL = "level01.dat";
+    curL = "level02.dat";
     
     Level lev(assDir);
     Level::LoadResult result = lev.loadLevel(curL);
@@ -179,18 +179,6 @@ void StudentWorld::removeDeadGameObjects()
 //void setGameStatText(string text);
 //bool getKey(int& value);
 //void playSound(int soundID);
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
