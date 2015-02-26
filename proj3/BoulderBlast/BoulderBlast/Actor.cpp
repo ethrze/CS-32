@@ -140,10 +140,10 @@ void Player::doSomething()
                         
                         break;
                     case KEY_PRESS_ESCAPE:
-                        
+                        getWorld()->decLives(); // do I wanna decLives here??? mehbeh?
                         break;
                     case KEY_PRESS_SPACE:
-                        
+                        // fire bullet if there is ammo!
                         break;
                 }
             }
@@ -225,6 +225,7 @@ void Jewel::doSomething()
         this->kill();
         setVisible(false); // this should probably be temporary
         // you'll want this to effect POINTS
+        getWorld()->incScore(20);
     }
 }
 

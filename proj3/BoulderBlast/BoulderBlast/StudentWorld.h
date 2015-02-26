@@ -48,6 +48,23 @@ public:
         return m_stage;
     }
     
+    virtual int getCurrentScore() { return m_score; }
+    virtual int getCurrentGameLevel() { return getLevel(); }
+    virtual int getCurrentLevelBonus() { return levBonus; }
+    virtual int getNumberOfLivesThePlayerHasLeft() { return m_lives; }
+    
+    
+    void updateDisplayText(); 
+    
+    virtual void incScore(int plus) { m_score+=plus; }
+    virtual void decScore(int minu)
+    {
+        if (m_score - minu >= 0)
+            m_score-=minu;
+        m_score = 0;
+    }
+    virtual void decLevBonus() { levBonus--; }
+    
     virtual void removeDeadGameObjects();
 
 //    virtual void updateDisplayText();
@@ -62,6 +79,10 @@ private:
     std::vector<Actor*> m_stage;
     
     Actor* m_player;
+    
+    int m_score;
+    int levBonus;
+    int m_lives;
 };
 
 #endif // STUDENTWORLD_H_

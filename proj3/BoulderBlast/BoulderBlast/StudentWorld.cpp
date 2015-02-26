@@ -86,7 +86,27 @@ void StudentWorld::cleanUp()
     
 }
 
-void updateDisplayText() {
+void StudentWorld::updateDisplayText() {
+    
+    int score = getCurrentScore();
+    int level = getCurrentGameLevel();
+    unsigned int bonus = getCurrentLevelBonus();
+    int livesLeft = getNumberOfLivesThePlayerHasLeft();
+    string perfString = "Score: " + to_string(score) + " Level: " + to_string(level) + " Lives: " + to_string(livesLeft) + " Health: " + to_string(m_player->getHealth()) + "% Ammo: " + to_string(m_player->getAmmo()) + " Bonus: " + to_string(bonus);
+    
+//    void setDisplayText() {
+//        int score = getCurrentScore();
+//        int level = getCurrentGameLevel();
+//        unsigned int bonus = getCurrentLevelBonus();
+//        int livesLeft = getNumberOfLivesThePlayerHasLeft();
+//        // Next, create a string from your statistics, of the form:
+//        // Score: 0000100 Level: 03 Lives: 3 Health: 70% Ammo: 216 Bonus: 34
+//        string s = someFunctionToFormatThingsNicely(score, level, lives, health, ammo, bonus);
+//        // Finally, update the display text at the top of the screen with your // newly created stats
+//        setGameStatText(s); // calls our provided GameWorld::setGameStatText
+//    }
+    
+        
     
     
     //setGameStatText(perfString);

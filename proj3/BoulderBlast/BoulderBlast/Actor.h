@@ -66,6 +66,9 @@ public:
     
     virtual void moveRight();
     
+    virtual int getHealth() { return 0; }
+    virtual int getAmmo() { return 0; }
+    
     virtual ~Actor() {}
     
 private:
@@ -93,6 +96,9 @@ public:
         return this->getDirection();
     }
     
+    virtual int getHealth() { return m_health; }
+    virtual int getAmmo() { return m_ammo; }
+    
 //    virtual bool canMove(int dx, int dy);
     virtual bool canMove(Direction dir); 
     
@@ -100,6 +106,8 @@ public:
     
 private:
     bool m_dead;
+    int m_health;
+    int m_ammo;
     
 };
 
