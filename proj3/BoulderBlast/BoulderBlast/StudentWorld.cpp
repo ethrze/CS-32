@@ -137,7 +137,9 @@ int StudentWorld::levelLoader()
                     m_stage.push_back(new Boulder(c, r, this));
                 // hole
                 if (atHand == Level::hole)
-                    m_stage.push_back(new Hole(c, r, this)); 
+                    m_stage.push_back(new Hole(c, r, this));
+                if (atHand == Level::exit)
+                    m_stage.push_back(new Exit(c, r, this)); 
 
                 
                 

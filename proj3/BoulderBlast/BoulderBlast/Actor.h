@@ -227,6 +227,28 @@ private:
     bool m_dead;
 };
 
+class Exit : public Actor {
+public:
+    Exit(int sx, int sy, StudentWorld* world)
+    : Actor(IID_EXIT, sx, sy, world), m_dead(0), m_active(0)
+    {
+        
+    }
+    
+    virtual void kill() { m_dead = true; }
+    
+    virtual void doSomething();
+    
+    virtual void setActive() { m_active = true; setVisible(true); }
+    
+    virtual bool amIDead() { return m_dead; }
+    
+    virtual ~Exit();
+private:
+    bool m_dead;
+    bool m_active;
+};
+
 
 
 

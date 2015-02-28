@@ -226,7 +226,6 @@ void Jewel::doSomething()
         setVisible(false); // this should probably be temporary
         // you'll want this to effect POINTS
         getWorld()->incScore(20);
-        cerr << "Once" << endl;
     }
 }
 
@@ -292,7 +291,7 @@ bool Boulder::canMove(Direction dir)
     return true;
 }
 
-Boulder::~Boulder() {}
+Boulder::~Boulder() { }
 
 
 void Bullet::doSomething()
@@ -300,7 +299,7 @@ void Bullet::doSomething()
     
 }
 
-Bullet::~Bullet() {}
+Bullet::~Bullet() { }
 
 void Hole::doSomething()
 {
@@ -319,6 +318,34 @@ Hole::~Hole()
 {
     
 }
+
+void Exit::doSomething()
+{
+    int count = 0;
+    vector<Actor*> ourStage = getWorld()->getStage();
+    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+    {
+        if ((*q)->who() == IID_JEWEL)
+            count++;
+    }
+    if (count == 0)
+    {
+        setActive(); // this sets the active indicator to true, makes the exit visible;
+        getWorld()->playSound(SOUND_REVEAL_EXIT);
+    }
+    
+    if (m_active == true)
+    {
+        if (getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() == this->getY())
+        {
+            kill();
+        }
+    }
+}
+
+Exit::~Exit() { }
+
+
 
 
 
