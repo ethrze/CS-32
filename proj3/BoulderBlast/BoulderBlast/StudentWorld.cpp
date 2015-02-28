@@ -151,8 +151,15 @@ int StudentWorld::levelLoader()
                 if (atHand == Level::restore_health)
                     m_stage.push_back(new RestoreHealthGoodie(c, r, this));
                 // ammo
-//                if (atHand == Level::ammo)
-//                    m_stage.push_back(new Ammo(c, r, this));
+                if (atHand == Level::ammo)
+                    m_stage.push_back(new Ammo(c, r, this));
+                // HORIZ SNARLBOT
+                if (atHand == Level::horiz_snarlbot)
+                    m_stage.push_back(new HorizontalSnarlbot(c, r, this));
+                // VERT SNARLBOT
+//                if (atHand == level::vert_snarlbot)
+//                    m_stage.push_back(new VerticalSnarlbot(c, r, this));
+                        
                 
                 
             } // end not empty
@@ -184,6 +191,7 @@ void StudentWorld::diagnostics()
     cout << "Player score: " << getScore() << endl;
     cout << "Player lives: " << getLives() << endl;
     cout << "Player health: " << getPlayer()->getHealth() << endl;
+    cout << "Player ammo: " << getPlayer()->getAmmo() << endl;
     cout << "---------" << endl;
 }
 

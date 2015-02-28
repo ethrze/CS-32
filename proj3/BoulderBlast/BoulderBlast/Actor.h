@@ -56,6 +56,8 @@ public:
         return m_IID;
     }
     
+    virtual bool hit(); 
+    
     virtual bool canMove(Direction dir);
     
     virtual void moveUp();
@@ -123,7 +125,31 @@ private:
     
 };
 
-
+class HorizontalSnarlbot : public Actor {
+public:
+    HorizontalSnarlbot(int sx, int sy, StudentWorld* world)
+    : Actor(IID_SNARLBOT, sx, sy, world), m_dead(0), m_health(10)
+    {
+        setDirection(right);
+        setVisible(true);
+        m_tick = tickGen();
+        
+    }
+    
+    virtual void doSomething();
+    
+    virtual bool canMove(Direction dir);
+    
+    virtual int tickGen(); 
+    virtual void tickMachine();
+    
+    virtual ~HorizontalSnarlbot() {}
+    
+private:
+    bool m_dead;
+    int m_health;
+    int m_tick;
+};
 
 
 
@@ -238,8 +264,6 @@ public:
     virtual void doSomething();
     
     virtual void setActive() { m_active = true; setVisible(true); }
-    
-    
     
     virtual ~Exit();
 private:

@@ -47,6 +47,19 @@ void Actor::moveRight()
     this->moveTo(this->getX()+1, this->getY());
 }
 
+bool Actor::hit()
+{
+    vector<Actor*> thisStage = getWorld()->getStage();
+    for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+    {
+        if ((*q)->who() == IID_BULLET)
+        {
+            if(this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
+                return true;
+        }
+    }
+    return false;
+}
 
 ////////////////
 //    WALL    //
@@ -217,18 +230,36 @@ bool Player::canMove(Direction dir)
 Player::~Player() {}
 
 
-//void Jewel::doSomething()
-//{
-//    if (amIDead() == false && getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() == this->getY())
-//    {
-//        getWorld()->increaseScore(20);
-//        setVisible(false);
-//        kill();
-//    }
-//}
+// SNARLBOT
 
-//Jewel::~Jewel() {}
+void HorizontalSnarlbot::doSomething()
+{
 
+    
+    
+}
+
+bool HorizontalSnarlbot::canMove(Direction dir)
+{
+    
+    return false;
+}
+
+int HorizontalSnarlbot::tickGen()
+{
+    int levelNumber = 2;
+    int ticks = (28 - levelNumber) / 4; // levelNumber is the current
+    // level number (0, 1, 2, etc.)
+    if (ticks < 3)
+        ticks = 3; // no SnarlBot moves more frequently than this
+    
+    return ticks;
+}
+
+void HorizontalSnarlbot::tickMachine()
+{
+    m_tick--; 
+}
 
 void Boulder::doSomething()
 {
