@@ -69,6 +69,9 @@ public:
     virtual int getHealth() { return 0; }
     virtual void setHealth(int num) { }
     virtual int getAmmo() { return 0; }
+    virtual void setAmmo(int num) {}
+    virtual void addAmmo(int num) {}
+    virtual void decAmmo() {}
     
     virtual ~Actor() {}
     
@@ -98,12 +101,17 @@ public:
     }
     
     virtual int getHealth() { return m_health; }
-    
     virtual void setHealth(int num) { m_health = num; }
     
     virtual int getAmmo() { return m_ammo; }
-    
-//    virtual bool canMove(int dx, int dy);
+    void setAmmo(int num) { m_ammo = num; }
+    void addAmmo(int num) { m_ammo += num; }
+    void decAmmo()
+    {
+        if (m_ammo != 0)
+            m_ammo--;
+    }
+
     virtual bool canMove(Direction dir); 
     
     virtual ~Player();
@@ -339,6 +347,30 @@ public:
     ~RestoreHealthGoodie() {}
 private:
     int m_points = 500;
+    bool m_dead;
+};
+
+// / / / / / / / / / / //
+//     AMMO GOODIE     //
+// / / / / / / / / / / //
+class Ammo : public Goodie {
+public:
+    Ammo(int sx, int sy, StudentWorld* world)
+    : Goodie(sx, sy, world, IID_AMMO), m_dead(0)
+    {
+        setVisible(true);
+        setDirection(none);
+    }
+    
+    void goodieSpec();
+    int getPoints() { return m_points;}
+    
+    virtual void kill() { m_dead = true; }
+    virtual bool amIDead() { return m_dead; }
+    
+    ~Ammo() {}
+private:
+    int m_points = 100;
     bool m_dead;
 };
 

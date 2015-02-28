@@ -313,6 +313,7 @@ Hole::~Hole() { }
 
 void Exit::doSomething()
 {
+    /* this bit works */
     int count = 0;
     vector<Actor*> ourStage = getWorld()->getStage();
     for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
@@ -320,12 +321,13 @@ void Exit::doSomething()
         if ((*q)->who() == IID_JEWEL)
             count++;
     }
-    if (count == 0)
+    if (count == 0 && m_active == false)
     {
         getWorld()->playSound(SOUND_REVEAL_EXIT);
         setActive(); // this sets the active indicator to true, makes the exit visible;
         
     }
+    /*                */
     
     if (m_active == true)
     {
@@ -371,4 +373,9 @@ void ExtraLifeGoodie::goodieSpec()
 void RestoreHealthGoodie::goodieSpec()
 {
     getWorld()->getPlayer()->setHealth(20);
+}
+
+void Ammo::goodieSpec()
+{
+    getWorld()->getPlayer()->addAmmo(20);
 }
