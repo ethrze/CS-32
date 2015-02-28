@@ -141,11 +141,18 @@ int StudentWorld::levelLoader()
                 // hole
                 if (atHand == Level::hole)
                     m_stage.push_back(new Hole(c, r, this));
+                // exit
                 if (atHand == Level::exit)
                     m_stage.push_back(new Exit(c, r, this));
+                // extra life
                 if (atHand == Level::extra_life)
-                    m_stage.push_back(new ExtraLifeGoodie(c, r, this)); 
-
+                    m_stage.push_back(new ExtraLifeGoodie(c, r, this));
+                // retore health
+                if (atHand == Level::restore_health)
+                    m_stage.push_back(new RestoreHealthGoodie(c, r, this));
+                // ammo
+//                if (atHand == Level::ammo)
+//                    m_stage.push_back(new Ammo(c, r, this));
                 
                 
             } // end not empty
@@ -196,53 +203,6 @@ void StudentWorld::diagnostics()
 //void setGameStatText(string text);
 //bool getKey(int& value);
 //void playSound(int soundID);
-
-
-
-
-
-
-
-////////////////////////////////
-//          LALALAND          //
-////////////////////////////////
-
-
-
-//int StudentWorld::move() {
-
-//    // Update the Game Status Line
-//    updateDisplayText(); // update the score/lives/level text at screen top
-
-
-//    // The term "actors" refers to all robots, the Player, Goodies, // Boulders, Jewels, Holes, Bullets, the Exit, etc.
-//    // Give each actor a chance to do something
-//    for each of the actors in the game world {
-//        if (actor[i] is still active/alive) {
-//            // ask each actor to do something (e.g. move)
-//            16
-//            actor[i]->doSomething();
-//            if (thePlayerDiedDuringThisTick()) return GWSTATUS_PLAYER_DIED;
-//            if (thePlayerCompletedTheCurrentLevel()) {
-//                increaseScoreAppropriately(); return GWSTATUS_FINISHED_LEVEL;
-//            } }
-//    }
-//    removeDeadGameObjects(); // delete dead game objects
-//    // Reduce the current bonus for the Level by one
-//    reduceLevelBonusByOne();
-//    // If the player has collected all of the Jewels on the level, then we
-//    // must expose the Exit so the player can advance to the next level
-//    if (thePlayerHasCollectedAllOfTheJewelsOnTheLevel()) exposeTheExitInTheMaze(); // make the exit Active
-//    // return the proper result
-//    if (thePlayerDiedDuringThisTick()) return GWSTATUS_PLAYER_DIED;
-//    if (thePlayerCompletedTheCurrentLevel()) {
-//        // Remove newly-dead actors after each tick
-//        increaseScoreAppropriately(); return GWSTATUS_FINISHED_LEVEL;
-//    }
-//    // continue playing the current level return GWSTATUS_CONTINUE_GAME;
-//}
-
-
 
 
 

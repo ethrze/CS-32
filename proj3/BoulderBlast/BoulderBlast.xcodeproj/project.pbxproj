@@ -83,10 +83,10 @@
 		4B5BB2631A9110AA009A9A96 /* BoulderBlast */ = {
 			isa = PBXGroup;
 			children = (
-				AD6566EF1A9AD0C900F6061E /* Actor.cpp */,
 				AD6566F01A9AD0C900F6061E /* Actor.h */,
-				AD6566FC1A9AD0C900F6061E /* StudentWorld.cpp */,
+				AD6566EF1A9AD0C900F6061E /* Actor.cpp */,
 				AD6566FD1A9AD0C900F6061E /* StudentWorld.h */,
+				AD6566FC1A9AD0C900F6061E /* StudentWorld.cpp */,
 				AD6566F11A9AD0C900F6061E /* GameConstants.h */,
 				AD6566F21A9AD0C900F6061E /* GameController.cpp */,
 				AD6566F31A9AD0C900F6061E /* GameController.h */,

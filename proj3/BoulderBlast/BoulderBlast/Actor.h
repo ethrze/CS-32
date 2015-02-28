@@ -145,25 +145,7 @@ private:
     bool m_dead;
     
 };
-//// / / / / / / / / / / //
-////        JEWEL        //
-//// / / / / / / / / / / //
-//class Jewel : public Actor {
-//public:
-//    Jewel(int sx, int sy, StudentWorld* world)
-//    :Actor(IID_JEWEL, sx, sy, world), m_dead(0)
-//    {
-//        setVisible(true);
-//    }
-//    
-//    virtual void kill() { m_dead = true; }
-//    
-//    virtual void doSomething();
-//    
-//    virtual ~Jewel();
-//private:
-//    bool m_dead;
-//};
+
 
 // / / / / / / / / / / //
 //       BOULDER       //
