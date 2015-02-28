@@ -68,8 +68,6 @@ void Player::doSomething()
         {
             if (getWorld()->getKey(ch))
             {
-                //                for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
-                //                {
                 switch(ch)
                 {
                     case KEY_PRESS_LEFT:
@@ -140,7 +138,8 @@ void Player::doSomething()
                         
                         break;
                     case KEY_PRESS_ESCAPE:
-                        getWorld()->decLives(); // do I wanna decLives here??? mehbeh?
+//                        getWorld()->decLives();
+                        getWorld()->diagnostics();
                         break;
                     case KEY_PRESS_SPACE:
                         // fire bullet if there is ammo!
@@ -218,27 +217,23 @@ bool Player::canMove(Direction dir)
 Player::~Player() {}
 
 
-void Jewel::doSomething()
-{
-    if (getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() == this->getY())
-    {
-        this->kill();
-        setVisible(false); // this should probably be temporary
-        // you'll want this to effect POINTS
-        getWorld()->incScore(20);
-    }
-}
+//void Jewel::doSomething()
+//{
+//    if (amIDead() == false && getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() == this->getY())
+//    {
+//        getWorld()->increaseScore(20);
+//        setVisible(false);
+//        kill();
+//    }
+//}
 
-Jewel::~Jewel() {}
+//Jewel::~Jewel() {}
 
 
 void Boulder::doSomething()
 {
-    
-    
     if (hitPts == 0)
         kill();
-    
 }
 
 bool Boulder::canMove(Direction dir)
@@ -314,10 +309,7 @@ void Hole::doSomething()
     }
 }
 
-Hole::~Hole()
-{
-    
-}
+Hole::~Hole() { }
 
 void Exit::doSomething()
 {
@@ -330,8 +322,9 @@ void Exit::doSomething()
     }
     if (count == 0)
     {
-        setActive(); // this sets the active indicator to true, makes the exit visible;
         getWorld()->playSound(SOUND_REVEAL_EXIT);
+        setActive(); // this sets the active indicator to true, makes the exit visible;
+        
     }
     
     if (m_active == true)
@@ -339,6 +332,7 @@ void Exit::doSomething()
         if (getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() == this->getY())
         {
             kill();
+            getWorld()->endLevel();
         }
     }
 }
@@ -346,6 +340,35 @@ void Exit::doSomething()
 Exit::~Exit() { }
 
 
+void Goodie::doSomething()
+{
+    if (amIDead())
+        return;
+    if (this->getX() == getWorld()->getPlayer()->getX() && this->getY() == getWorld()->getPlayer()->getY())
+    {
+        this->givePoints();
+        this->kill();
+        getWorld()->playSound(SOUND_GOT_GOODIE);
+        this->goodieSpec();
+    }
+}
 
+void Goodie::givePoints()
+{
+    getWorld()->increaseScore(this->getPoints());
+}
 
+void Jewel::goodieSpec()
+{
+    
+}
 
+void ExtraLifeGoodie::goodieSpec()
+{
+    getWorld()->incLives();
+}
+
+void RestoreHealthGoodie::goodieSpec()
+{
+    getWorld()->getPlayer()->setHealth(20);
+}

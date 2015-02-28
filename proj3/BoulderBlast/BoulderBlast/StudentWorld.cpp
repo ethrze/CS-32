@@ -24,7 +24,7 @@ GameWorld* createStudentWorld(string assetDir)
 }
 
 StudentWorld::StudentWorld(std::string assetDir)
-: GameWorld(assetDir), assDir(assetDir)
+: GameWorld(assetDir), assDir(assetDir), m_endLevel(false)
 {
 }
 
@@ -68,6 +68,9 @@ int StudentWorld::move() // this is basically the 'tick' method
     // remove dead game objects
     removeDeadGameObjects();
     
+    if (m_endLevel == true)
+        return GWSTATUS_FINISHED_LEVEL;
+    
     // reduce level bonus by one
     decLevBonus();
     
@@ -90,12 +93,12 @@ void StudentWorld::cleanUp()
 
 void StudentWorld::updateDisplayText() {
     
-    int score = getCurrentScore();
-    int level = getCurrentGameLevel();
-    unsigned int bonus = getCurrentLevelBonus();
-    int livesLeft = getNumberOfLivesThePlayerHasLeft();
-    string perfString = "Score: " + to_string(score) + " Level: " + to_string(level) + " Lives: " + to_string(livesLeft) + " Health: " + to_string(m_player->getHealth()) + "% Ammo: " + to_string(m_player->getAmmo()) + " Bonus: " + to_string(bonus);
-    setGameStatText(perfString);
+//    int score = getCurrentScore();
+//    int level = getCurrentGameLevel();
+//    unsigned int bonus = getCurrentLevelBonus();
+//    int livesLeft = getNumberOfLivesThePlayerHasLeft();
+//    string perfString = "Score: " + to_string(score) + " Level: " + to_string(level) + " Lives: " + to_string(livesLeft) + " Health: " + to_string(m_player->getHealth()) + "% Ammo: " + to_string(m_player->getAmmo()) + " Bonus: " + to_string(bonus);
+//    setGameStatText(perfString);
     
 }
 
@@ -139,7 +142,9 @@ int StudentWorld::levelLoader()
                 if (atHand == Level::hole)
                     m_stage.push_back(new Hole(c, r, this));
                 if (atHand == Level::exit)
-                    m_stage.push_back(new Exit(c, r, this)); 
+                    m_stage.push_back(new Exit(c, r, this));
+                if (atHand == Level::extra_life)
+                    m_stage.push_back(new ExtraLifeGoodie(c, r, this)); 
 
                 
                 
@@ -162,8 +167,18 @@ void StudentWorld::removeDeadGameObjects()
     }
 }
 
+void StudentWorld::endLevel()
+{
+    m_endLevel = true;
+}
 
-
+void StudentWorld::diagnostics()
+{
+    cout << "Player score: " << getScore() << endl;
+    cout << "Player lives: " << getLives() << endl;
+    cout << "Player health: " << getPlayer()->getHealth() << endl;
+    cout << "---------" << endl;
+}
 
 
 

@@ -48,11 +48,14 @@ public:
         return m_stage;
     }
     
+    virtual void endLevel(); 
+    
     virtual int getCurrentScore() { return m_score; }
     virtual int getCurrentGameLevel() { return getLevel(); }
     virtual int getCurrentLevelBonus() { return levBonus; }
     virtual int getNumberOfLivesThePlayerHasLeft() { return m_lives; }
     
+    void diagnostics(); 
     
     void updateDisplayText(); 
     
@@ -83,6 +86,8 @@ private:
     int m_score;
     int levBonus;
     int m_lives;
+    
+    bool m_endLevel;
 };
 
 #endif // STUDENTWORLD_H_

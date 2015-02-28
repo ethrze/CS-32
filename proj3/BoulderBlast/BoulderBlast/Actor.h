@@ -67,6 +67,7 @@ public:
     virtual void moveRight();
     
     virtual int getHealth() { return 0; }
+    virtual void setHealth(int num) { }
     virtual int getAmmo() { return 0; }
     
     virtual ~Actor() {}
@@ -97,6 +98,9 @@ public:
     }
     
     virtual int getHealth() { return m_health; }
+    
+    virtual void setHealth(int num) { m_health = num; }
+    
     virtual int getAmmo() { return m_ammo; }
     
 //    virtual bool canMove(int dx, int dy);
@@ -141,25 +145,26 @@ private:
     bool m_dead;
     
 };
-// / / / / / / / / / / //
-//        JEWEL        //
-// / / / / / / / / / / //
-class Jewel : public Actor {
-public:
-    Jewel(int sx, int sy, StudentWorld* world)
-    :Actor(IID_JEWEL, sx, sy, world), m_dead(0)
-    {
-        setVisible(true);
-    }
-    
-    virtual void kill() { m_dead = 1; }
-    
-    virtual void doSomething();
-    
-    virtual ~Jewel();
-private:
-    bool m_dead;
-};
+//// / / / / / / / / / / //
+////        JEWEL        //
+//// / / / / / / / / / / //
+//class Jewel : public Actor {
+//public:
+//    Jewel(int sx, int sy, StudentWorld* world)
+//    :Actor(IID_JEWEL, sx, sy, world), m_dead(0)
+//    {
+//        setVisible(true);
+//    }
+//    
+//    virtual void kill() { m_dead = true; }
+//    
+//    virtual void doSomething();
+//    
+//    virtual ~Jewel();
+//private:
+//    bool m_dead;
+//};
+
 // / / / / / / / / / / //
 //       BOULDER       //
 // / / / / / / / / / / //
@@ -226,7 +231,9 @@ public:
 private:
     bool m_dead;
 };
-
+// / / / / / / / / / / //
+//         EXIT        //
+// / / / / / / / / / / //
 class Exit : public Actor {
 public:
     Exit(int sx, int sy, StudentWorld* world)
@@ -236,18 +243,124 @@ public:
     }
     
     virtual void kill() { m_dead = true; }
+    virtual bool amIDead() { return m_dead; }
     
     virtual void doSomething();
     
     virtual void setActive() { m_active = true; setVisible(true); }
     
-    virtual bool amIDead() { return m_dead; }
+    
     
     virtual ~Exit();
 private:
     bool m_dead;
     bool m_active;
 };
+
+// / / / / / / / / / / //
+//      GEN GOODIE     //
+// / / / / / / / / / / //
+class Goodie : public Actor {
+public:
+    Goodie(int sx, int sy, StudentWorld* world, const int goodID)
+    : Actor(goodID, sx, sy, world), m_dead(0)
+    {
+        setVisible(true);
+        setDirection(none);
+    }
+    
+    virtual void doSomething();
+    
+    virtual void givePoints();
+    
+    virtual void goodieSpec() {}
+    virtual int getPoints() { return m_points; }
+    
+    virtual void kill() { m_dead = true; }
+    virtual bool amIDead() { return m_dead; }
+    
+    ~Goodie() { }
+private:
+    bool m_dead;
+    int m_points;
+    
+};
+
+// / / / / / / / / / / //
+//        JEWEL        //
+// / / / / / / / / / / //
+class Jewel : public Goodie {
+public:
+    Jewel(int sx, int sy, StudentWorld* world)
+    : Goodie(sx, sy, world, IID_JEWEL), m_dead(0)
+    {
+        setVisible(true);
+        setDirection(none);
+    }
+    
+    void goodieSpec();
+    int getPoints() { return m_points; }
+    
+    virtual int who() { return IID_JEWEL; }
+    
+    virtual void kill() { m_dead = true; }
+    virtual bool amIDead() { return m_dead; }
+    
+    ~Jewel() {}
+private:
+    int m_points = 50;
+    bool m_dead;
+};
+
+// / / / / / / / / / / //
+//    X LIFE GOODIE    //
+// / / / / / / / / / / //
+class ExtraLifeGoodie : public Goodie {
+public:
+    ExtraLifeGoodie(int sx, int sy, StudentWorld* world)
+    : Goodie(sx, sy, world, IID_EXTRA_LIFE), m_dead(0)
+    {
+        setVisible(true);
+        setDirection(none);
+    }
+    
+    void goodieSpec();
+    int getPoints() { return m_points; }
+    
+    virtual void kill() { m_dead = true; }
+    virtual bool amIDead() { return m_dead; }
+    
+    ~ExtraLifeGoodie() {}
+private:
+    int m_points = 1000;
+    bool m_dead;
+};
+
+// / / / / / / / / / / //
+//    HEALTH GOODIE    //
+// / / / / / / / / / / //
+class RestoreHealthGoodie : public Goodie {
+public:
+    RestoreHealthGoodie(int sx, int sy, StudentWorld* world)
+    : Goodie(sx, sy, world, IID_RESTORE_HEALTH), m_dead(0)
+    {
+        setVisible(true);
+        setDirection(none);
+    }
+    
+    void goodieSpec();
+    int getPoints() { return m_points;}
+    
+    virtual void kill() { m_dead = true; }
+    virtual bool amIDead() { return m_dead; }
+    
+    ~RestoreHealthGoodie() {}
+private:
+    int m_points = 500;
+    bool m_dead;
+};
+
+
 
 
 
