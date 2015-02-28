@@ -153,6 +153,8 @@ int StudentWorld::levelLoader()
                 // ammo
                 if (atHand == Level::ammo)
                     m_stage.push_back(new Ammo(c, r, this));
+                
+                
                 // HORIZ SNARLBOT
                 if (atHand == Level::horiz_snarlbot)
                     m_stage.push_back(new HorizontalSnarlbot(c, r, this));

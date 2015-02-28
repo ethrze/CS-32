@@ -234,14 +234,99 @@ Player::~Player() {}
 
 void HorizontalSnarlbot::doSomething()
 {
-
+    if (amIDead() == true)
+        return;
+    if (m_tick != 0)
+    {
+        tickMachine();
+        return;
+    }
+    if (m_tick == 0)
+    {
+        // try to shoot
+        if (shouldShoot(getDirection()))
+        {
+            // FIRE BULLET!
+            // GIVE BULLET TO STUDENT WORLD!
+            getWorld()->playSound(SOUND_ENEMY_FIRE);
+        }
+        
+        // try to move
+        if (canMove(getDirection()))
+        {
+            if (getDirection() == left)
+                moveLeft();
+            if (getDirection() == right)
+                moveRight();
+        }
+        
+        if (hit())
+        {
+            if (m_health != 0)
+            {
+                m_health -= 2;
+                getWorld()->playSound(SOUND_ROBOT_IMPACT);
+            }
+            if (amIDead())
+            {
+                kill();
+                getWorld()->playSound(SOUND_ROBOT_DIE);
+                getWorld()->increaseScore(100);
+            }
+            
+        }
+        
+        
+    }
     
     
 }
 
 bool HorizontalSnarlbot::canMove(Direction dir)
 {
-    
+    int count = 0;
+    int xCol = this->getX();
+    int yRow = this->getY();
+    vector<Actor*> ourStage = getWorld()->getStage();
+    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
+    {
+        if (dir == left)
+        {
+            if (xCol - 1 < 0)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                count++;
+        }
+        if (dir == right)
+        {
+            if (xCol + 1 >= VIEW_WIDTH)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                count++;
+        }
+    }
+    if (count != 0)
+    {
+        if (dir == left)
+            setDirection(right);
+        if (dir == right)
+            setDirection(left);
+        return false;
+    }
+    return true;
+}
+
+bool HorizontalSnarlbot::shouldShoot(Direction dir)
+{
+    if (getWorld()->getPlayer()->getY() == this->getY() && noObstacles(this->getX(), this->getY(), dir))
+    {
+        // SHOOT
+        return true;
+    }
     return false;
 }
 
@@ -254,6 +339,40 @@ int HorizontalSnarlbot::tickGen()
         ticks = 3; // no SnarlBot moves more frequently than this
     
     return ticks;
+}
+bool HorizontalSnarlbot::noObstacles(int xCols, int yRows, Direction dir)
+{
+    if (dir == right)
+    {
+        vector<Actor*> ourStage = getWorld()->getStage();
+        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        {
+            for (int i = xCols; i < VIEW_WIDTH; i++)
+            {
+                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) && this->getY() == (*q)->getY() && i == (*q)->getX())
+                {
+                    return false;
+                }
+            
+            }
+        }
+    }
+    if (dir == left)
+    {
+        vector<Actor*> ourStage = getWorld()->getStage();
+        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        {
+            for (int i = xCols; i >= 0; i--)
+            {
+                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) && this->getY() == (*q)->getY() && i == (*q)->getX())
+                {
+                    return false;
+                }
+                
+            }
+        }
+    }
+    return true;
 }
 
 void HorizontalSnarlbot::tickMachine()

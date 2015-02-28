@@ -139,6 +139,8 @@ public:
     virtual void doSomething();
     
     virtual bool canMove(Direction dir);
+    virtual bool shouldShoot(Direction dir);
+    virtual bool noObstacles(int xCols, int yRows, Direction dir);
     
     virtual int tickGen(); 
     virtual void tickMachine();
