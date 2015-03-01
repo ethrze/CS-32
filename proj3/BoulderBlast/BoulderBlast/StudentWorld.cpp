@@ -165,9 +165,12 @@ int StudentWorld::levelLoader()
                 if (atHand == Level::horiz_snarlbot)
                     m_stage.push_back(new HorizontalSnarlbot(c, r, this));
                 // VERT SNARLBOT
-//                if (atHand == level::vert_snarlbot)
-//                    m_stage.push_back(new VerticalSnarlbot(c, r, this));
-                        
+                if (atHand == Level::vert_snarlbot)
+                    m_stage.push_back(new VerticalSnarlbot(c, r, this));
+                
+//                if (atHand == level::kleptobot_factory)
+//                    m_stage.push_back(new KleptobotFactory(c, r, this));
+                
                 
                 
             } // end not empty

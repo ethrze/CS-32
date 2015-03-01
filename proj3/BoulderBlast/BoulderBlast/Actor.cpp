@@ -56,7 +56,7 @@ bool Actor::hit()
         {
             if(this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
                 (*q)->kill();
-                return true;
+            return true;
         }
     }
     return false;
@@ -152,7 +152,7 @@ void Player::doSomething()
                         
                         break;
                     case KEY_PRESS_ESCAPE:
-//                        getWorld()->decLives();
+                        //                        getWorld()->decLives();
                         getWorld()->diagnostics();
                         break;
                     case KEY_PRESS_SPACE:
@@ -254,65 +254,65 @@ int Robot::tickGen() // omnidir
 
 bool Robot::canMove(Direction dir)
 {
-
-        int count = 0;
-        int xCol = this->getX();
-        int yRow = this->getY();
-        vector<Actor*> ourStage = getWorld()->getStage();
-        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
-        {
-            if (dir == left)
-            {
-                if (xCol - 1 < 0)
-                    count++;
-                if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
-                    count++;
-                if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
-                    count++;
-                if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
-                    count++;
-            }
-            if (dir == right)
-            {
-                if (xCol + 1 >= VIEW_WIDTH)
-                    count++;
-                if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
-                    count++;
-                if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
-                    count++;
-                if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
-                    count++;
-            }
-            if (dir == up)
-            {
-                if (yRow + 1 >= VIEW_HEIGHT)
-                    count++;
-                if ((*q)->who() == IID_WALL && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
-                    count++;
-                if ((*q)->who() == IID_BOULDER && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
-                    count++;
-                if ((*q)->who() == IID_HOLE && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
-                    count++;
-            }
-            if (dir == down)
-            {
-                if (yRow - 1 < 0)
-                    count++;
-                if ((*q)->who() == IID_WALL && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
-                    count++;
-                if ((*q)->who() == IID_BOULDER && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
-                    count++;
-                if ((*q)->who() == IID_HOLE && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
-                    count++;
-            }
-        }
-        if (count != 0)
-        {
-            return false;
-        }
-        return true;
     
-
+    int count = 0;
+    int xCol = this->getX();
+    int yRow = this->getY();
+    vector<Actor*> ourStage = getWorld()->getStage();
+    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
+    {
+        if (dir == left)
+        {
+            if (xCol - 1 < 0)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                count++;
+            if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                count++;
+        }
+        if (dir == right)
+        {
+            if (xCol + 1 >= VIEW_WIDTH)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                count++;
+            if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                count++;
+        }
+        if (dir == up)
+        {
+            if (yRow + 1 >= VIEW_HEIGHT)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_HOLE && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                count++;
+        }
+        if (dir == down)
+        {
+            if (yRow - 1 < 0)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_HOLE && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                count++;
+        }
+    }
+    if (count != 0)
+    {
+        return false;
+    }
+    return true;
+    
+    
 }
 
 
@@ -517,7 +517,7 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // om
                 {
                     return false;
                 }
-            
+                
             }
         }
     }
@@ -580,6 +580,101 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // om
 //  KLEPTOBOT //
 ////////////////
 
+void Kleptobot::doSomething()
+{
+    if (amIDead() == true)
+        return;
+    if (m_tick != tickGen())
+    {
+        m_tick++;
+        return;
+    }
+    if (m_tick == tickGen())
+    {
+        
+        vector<Actor*> ourStage = getWorld()->getStage();
+        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        {
+            if ( ((*q)->who() == IID_EXTRA_LIFE || (*q)->who() == IID_RESTORE_HEALTH || (*q)->who() == IID_AMMO) &&
+                (*q)->getX() == this->getX() && (*q)->getY() == this->getY() && hasGoodie == false)
+            {
+                if ( 1 == rand() % 10)
+                {
+                    stolenGoodie = (*q)->who();
+                    hasGoodie = true;
+                    (*q)->kill();
+                    getWorld()->playSound(SOUND_ROBOT_MUNCH);
+                    return;
+                }
+            }
+        }
+        
+        // try to move
+        if (moves != dBT && canMove(getDirection()))
+        {
+            if (getDirection() == left)
+                moveLeft();
+            if (getDirection() == right)
+                moveRight();
+            if (getDirection() == down)
+                moveDown();
+            if (getDirection() == up)
+                moveUp();
+            moves++;
+        }
+        
+        if (!canMove(getDirection()) || moves == dBT)
+        {
+            // pick random new dBT
+            dBT = dbtGen();
+            // pick random new direction
+            getRandDir();
+            
+            if (!canMove(m_dir))
+                getRandDir();
+            
+            if (!canMove(left) && !canMove(right) && !canMove(up) && !canMove(down))
+            {
+                m_dir = right;
+                return;
+            }
+            
+        }
+        
+        if (hit())
+        {
+            if (m_health != 0)
+            {
+                m_health -= 2;
+                getWorld()->playSound(SOUND_ROBOT_IMPACT);
+            }
+            if (m_health == 0)
+            {
+                kill();
+                
+                if (stolenGoodie == IID_AMMO)
+                {
+                    Actor* ammo = new Ammo(getX(), getY(), getWorld());
+                    getWorld()->getStage().push_back(ammo);
+                }
+                if (stolenGoodie == IID_EXTRA_LIFE)
+                {
+                    Actor* extra = new ExtraLifeGoodie(getX(), getY(), getWorld());
+                    getWorld()->getStage().push_back(extra);
+                }
+                if (stolenGoodie == IID_RESTORE_HEALTH)
+                {
+                    Actor* restore = new RestoreHealthGoodie(getX(), getY(), getWorld());
+                    getWorld()->getStage().push_back(restore);
+                }
+                
+                getWorld()->playSound(SOUND_ROBOT_DIE);
+                getWorld()->increaseScore(10);
+            }
+        }
+        m_tick = 1;
+    }
+}
 
 
 

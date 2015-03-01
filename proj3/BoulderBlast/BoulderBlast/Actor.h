@@ -146,6 +146,8 @@ private:
     bool m_dead;
     int m_tick;
 };
+
+
 class HorizontalSnarlbot : public Robot {
 public:
     HorizontalSnarlbot(int sx, int sy, StudentWorld* world)
@@ -173,6 +175,7 @@ private:
     int m_tick;
 };
 
+
 class VerticalSnarlbot : public HorizontalSnarlbot {
 public:
     VerticalSnarlbot(int sx, int sy, StudentWorld* world)
@@ -187,6 +190,65 @@ public:
 private:
     bool m_dead;
     int m_health;
+    int m_tick;
+};
+
+class Kleptobot : public Robot {
+public:
+    Kleptobot(int sx, int sy, StudentWorld* world)
+    : Robot(sx, sy, world, IID_KLEPTOBOT), m_dead(0), m_health(5), m_tick(1), hasGoodie(0)
+    {
+        setDirection(right);
+        m_dir = right;
+        setVisible(true);
+        dBT = dbtGen(); 
+    }
+    
+    virtual void doSomething();
+    
+//    virtual void noObstacles(int xCols, int yRows, Direction dir);
+    
+    virtual int dbtGen()
+    {
+        int looker = rand() % 7;
+        if (looker == 0)
+            dbtGen();
+        return looker;
+    }
+    
+    virtual void getRandDir()
+    {
+        int picker = rand() % 4;
+        if (picker == 0) {
+            setDirection(left);
+            m_dir = left;
+        }
+        if (picker == 1) {
+            setDirection(right);
+            m_dir = right;
+        }
+        if (picker == 2) {
+            setDirection(up);
+            m_dir = up;
+        }
+        if (picker == 3) {
+            setDirection(down);
+            m_dir = down;
+        }
+    }
+    
+    ~Kleptobot() {}
+    
+private:
+    bool m_dead;
+    int m_health;
+    Direction m_dir;
+    
+    int stolenGoodie;
+    bool hasGoodie;
+    
+    int dBT;
+    int moves; 
     int m_tick;
 };
 
@@ -243,6 +305,7 @@ private:
     bool m_dead;
     int hitPts;
 };
+
 // / / / / / / / / / / //
 //        BULLET       //
 // / / / / / / / / / / //
@@ -437,8 +500,24 @@ private:
     bool m_dead;
 };
 
+// / / / / / / / / / / //
+//   KLEPTO FACTORY    //
+// / / / / / / / / / / //
+class KleptobotFactory : public Actor {
+public:
+    KleptobotFactory(int sx, int sy, StudentWorld* world)
+    : Actor(IID_ROBOT_FACTORY, sx, sy, world)
+    {
+        setVisible(true);
+        setDirection(none);
+    }
+    
+    
+    
+private:
 
-
+    
+};
 
 
 
