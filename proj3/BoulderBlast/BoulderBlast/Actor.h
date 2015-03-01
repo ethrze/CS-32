@@ -125,11 +125,31 @@ private:
     int m_ammo;
     
 };
-
-class HorizontalSnarlbot : public Actor {
+class Robot : public Actor {
+public:
+    Robot(int sx, int sy, StudentWorld* world, const int IID)
+    : Actor(IID, sx, sy, world), m_dead(0)
+    {
+        setDirection(right);
+        setVisible(true);
+        m_tick = 1;
+        
+    }
+    
+    virtual void doSomething() {}
+    
+    virtual bool canMove(Direction dir);
+    
+    virtual int tickGen();
+    
+private:
+    bool m_dead;
+    int m_tick;
+};
+class HorizontalSnarlbot : public Robot {
 public:
     HorizontalSnarlbot(int sx, int sy, StudentWorld* world)
-    : Actor(IID_SNARLBOT, sx, sy, world), m_dead(0), m_health(10)
+    : Robot(sx, sy, world, IID_SNARLBOT), m_dead(0), m_health(10)
     {
         setDirection(right);
         setVisible(true);
@@ -143,7 +163,7 @@ public:
     virtual bool shouldShoot(Direction dir);
     virtual bool noObstacles(int xCols, int yRows, Direction dir);
     
-    virtual int tickGen(); 
+    virtual int tickGen();
     
     virtual ~HorizontalSnarlbot() {}
     

@@ -78,6 +78,13 @@ int StudentWorld::move() // this is basically the 'tick' method
     
     if (m_player->amIDead())
         return GWSTATUS_PLAYER_DIED;
+
+    if (m_endLevel == true)
+    {
+        increaseScore(2000);
+//        increaseScore(); // bonus
+        return GWSTATUS_FINISHED_LEVEL;
+    }
     // if completed level
     // increase score
     // return GWSTATUS_FINISHED_LEVEL
@@ -105,7 +112,7 @@ int StudentWorld::levelLoader()
 {
     // LOAD UP YER LEVEL
     std::string curL;
-    curL = "level02.dat";
+    curL = "level03.dat";
     
     Level lev(assDir);
     Level::LoadResult result = lev.loadLevel(curL);

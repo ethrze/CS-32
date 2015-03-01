@@ -190,7 +190,7 @@ bool Player::canMove(Direction dir)
         {
             if (yRow + 1 >= VIEW_HEIGHT)
                 count++;
-            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead())) &&
+            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead()) || ((*q)->who() == IID_SNARLBOT)) &&
                 (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
                 count++;
             if ((*q)->who() == IID_BOULDER  && !(*q)->amIDead() &&
@@ -201,7 +201,7 @@ bool Player::canMove(Direction dir)
         {
             if (yRow - 1 < 0)
                 count++;
-            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead())) &&
+            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead()) || ((*q)->who() == IID_SNARLBOT)) &&
                 (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
                 count++;
             if ((*q)->who() == IID_BOULDER  && !(*q)->amIDead() &&
@@ -212,7 +212,7 @@ bool Player::canMove(Direction dir)
         {
             if (xCol - 1 < 0)
                 count++;
-            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead())) &&
+            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead()) || ((*q)->who() == IID_SNARLBOT)) &&
                 (*q)->getY() == yRow && (*q)->getX() == xCol-1)
                 count++;
             if ((*q)->who() == IID_BOULDER  && !(*q)->amIDead() &&
@@ -223,7 +223,7 @@ bool Player::canMove(Direction dir)
         {
             if (xCol + 1 >= VIEW_WIDTH)
                 count++;
-            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead())) &&
+            if (((*q)->who() == IID_WALL || ((*q)->who() == IID_HOLE && !(*q)->amIDead()) || ((*q)->who() == IID_SNARLBOT)) &&
                 (*q)->getY() == yRow && (*q)->getX() == xCol+1)
                 count++;
             if ((*q)->who() == IID_BOULDER && !(*q)->amIDead() &&
@@ -241,6 +241,80 @@ Player::~Player() {}
 
 
 // SNARLBOT
+int Robot::tickGen() // omnidir
+{
+    int levelNumber = 3;
+    int ticks = (28 - levelNumber) / 4; // levelNumber is the current
+    // level number (0, 1, 2, etc.)
+    if (ticks < 3)
+        ticks = 3; // no SnarlBot moves more frequently than this
+    
+    return ticks;
+}
+
+bool Robot::canMove(Direction dir)
+{
+
+        int count = 0;
+        int xCol = this->getX();
+        int yRow = this->getY();
+        vector<Actor*> ourStage = getWorld()->getStage();
+        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
+        {
+            if (dir == left)
+            {
+                if (xCol - 1 < 0)
+                    count++;
+                if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                    count++;
+                if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                    count++;
+                if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                    count++;
+            }
+            if (dir == right)
+            {
+                if (xCol + 1 >= VIEW_WIDTH)
+                    count++;
+                if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                    count++;
+                if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                    count++;
+                if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                    count++;
+            }
+            if (dir == up)
+            {
+                if (yRow + 1 >= VIEW_HEIGHT)
+                    count++;
+                if ((*q)->who() == IID_WALL && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                    count++;
+                if ((*q)->who() == IID_BOULDER && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                    count++;
+                if ((*q)->who() == IID_HOLE && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                    count++;
+            }
+            if (dir == down)
+            {
+                if (yRow - 1 < 0)
+                    count++;
+                if ((*q)->who() == IID_WALL && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                    count++;
+                if ((*q)->who() == IID_BOULDER && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                    count++;
+                if ((*q)->who() == IID_HOLE && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                    count++;
+            }
+        }
+        if (count != 0)
+        {
+            return false;
+        }
+        return true;
+    
+
+}
+
 
 
 ////////////////
@@ -384,6 +458,11 @@ bool HorizontalSnarlbot::canMove(Direction dir) // omnidir
     return true;
 }
 
+int HorizontalSnarlbot::tickGen()
+{
+    return Robot::tickGen();
+}
+
 bool HorizontalSnarlbot::shouldShoot(Direction dir) // omnidir
 {
     if (dir == left)
@@ -423,17 +502,6 @@ bool HorizontalSnarlbot::shouldShoot(Direction dir) // omnidir
         return false;
     }
     return false; // shouldn't make it here
-}
-
-int HorizontalSnarlbot::tickGen() // omnidir
-{
-    int levelNumber = 2;
-    int ticks = (28 - levelNumber) / 4; // levelNumber is the current
-    // level number (0, 1, 2, etc.)
-    if (ticks < 3)
-        ticks = 3; // no SnarlBot moves more frequently than this
-    
-    return ticks;
 }
 
 bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // omnidir
@@ -505,7 +573,19 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // om
 //  VSNARLBOT //
 ////////////////
 
+// INHERITANCE TOO GOOD BRUH
 
+
+////////////////
+//  KLEPTOBOT //
+////////////////
+
+
+
+
+/////////////////
+// ANGRYKLEPTO //
+/////////////////
 
 
 
@@ -530,7 +610,8 @@ bool Boulder::canMove(Direction dir)
         {
             if (yRow + 1 >= VIEW_HEIGHT)
                 count++;
-            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
+            if (((*q)->who() == IID_WALL || (*q)->who() == IID_SNARLBOT || (*q)->who() == IID_KLEPTOBOT ||
+                 (*q)->who() == IID_ANGRY_KLEPTOBOT) && (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow+1 && (*q)->getX() == xCol)
                 count++;
@@ -539,7 +620,8 @@ bool Boulder::canMove(Direction dir)
         {
             if (yRow - 1 < 0)
                 count++;
-            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
+            if (((*q)->who() == IID_WALL || (*q)->who() == IID_SNARLBOT || (*q)->who() == IID_KLEPTOBOT ||
+                 (*q)->who() == IID_ANGRY_KLEPTOBOT) && (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow-1 && (*q)->getX() == xCol)
                 count++;
@@ -548,7 +630,8 @@ bool Boulder::canMove(Direction dir)
         {
             if (xCol - 1 < 0)
                 count++;
-            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+            if (((*q)->who() == IID_WALL || (*q)->who() == IID_SNARLBOT || (*q)->who() == IID_KLEPTOBOT ||
+                 (*q)->who() == IID_ANGRY_KLEPTOBOT) && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
                 count++;
@@ -557,7 +640,8 @@ bool Boulder::canMove(Direction dir)
         {
             if (xCol + 1 >= VIEW_WIDTH)
                 count++;
-            if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+            if (((*q)->who() == IID_WALL || (*q)->who() == IID_SNARLBOT || (*q)->who() == IID_KLEPTOBOT ||
+                 (*q)->who() == IID_ANGRY_KLEPTOBOT) && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
                 count++;
@@ -633,6 +717,7 @@ void Exit::doSomething()
         if (getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() == this->getY())
         {
             kill();
+            getWorld()->playSound(SOUND_FINISHED_LEVEL);
             getWorld()->endLevel();
         }
     }
