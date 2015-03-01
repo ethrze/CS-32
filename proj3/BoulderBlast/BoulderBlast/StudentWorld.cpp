@@ -1,7 +1,10 @@
 #include "StudentWorld.h"
 #include "Level.h"
 #include <string>
-#include <vector>
+#include <list>
+#include <iomanip>
+#include <sstream>
+#include <iostream>
 using namespace std;
 
 //    ________  __    __  ________        __       __   ______   ______  __    __
@@ -20,11 +23,12 @@ using namespace std;
 
 GameWorld* createStudentWorld(string assetDir)
 {
-	return new StudentWorld(assetDir);
+
+    return new StudentWorld(assetDir);
 }
 
 StudentWorld::StudentWorld(std::string assetDir)
-: GameWorld(assetDir), assDir(assetDir), m_endLevel(false)
+: GameWorld(assetDir), assDir(assetDir), m_endLevel(false), levBonus(1000)
 {
 }
 
@@ -33,6 +37,8 @@ StudentWorld::StudentWorld(std::string assetDir)
 int StudentWorld::init()
 {
     levelLoader();
+    resetBonus();
+    m_endLevel = false;
     // getContentsOf(col, row); 
 
     
@@ -42,6 +48,19 @@ int StudentWorld::init()
 
 int StudentWorld::move() // this is basically the 'tick' method
 {
+    Level lev(assetDirectory());
+    //    Level::LoadResult result = lev.loadLevel(curL);
+    int levell = getLevel();
+    ostringstream strstrm;
+    strstrm.fill('0');
+    strstrm << "level" ;
+    strstrm << setw(2) << levell;
+    strstrm << ".dat";
+    string stir = strstrm.str();
+    Level::LoadResult res = lev.loadLevel(stir);
+    if (res == Level::load_fail_file_not_found)
+        return GWSTATUS_PLAYER_WON; // you're out of levels!
+    
     // update game status
     // ask everyone to do something
     // remove dead actors
@@ -50,8 +69,11 @@ int StudentWorld::move() // this is basically the 'tick' method
     updateDisplayText();
     
     // give each character the chance to do something
-    for (vector<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++) // all actors loop
+   ;
+    for (list<Actor*>::iterator q = m_stage.begin(); true; q++) // all actors loop
     {
+       if (q!= m_stage.end())
+       {
         if (!(*q)->amIDead()) // it's a pointer to a pointer to an actor
         {
             (*q)->doSomething();
@@ -62,6 +84,11 @@ int StudentWorld::move() // this is basically the 'tick' method
                 // increase score
                 // return GWSTATUS_FINISHED_LEVEL
         }
+       }
+       else {
+           break;
+       }
+        
     } // end all actors loop
     
     // remove dead game objects
@@ -73,8 +100,7 @@ int StudentWorld::move() // this is basically the 'tick' method
     // reduce level bonus by one
     decLevBonus();
     
-    // if player has collected all jewels
-        // expose exit
+
     
     if (m_player->amIDead())
         return GWSTATUS_PLAYER_DIED;
@@ -82,7 +108,7 @@ int StudentWorld::move() // this is basically the 'tick' method
     if (m_endLevel == true)
     {
         increaseScore(2000);
-//        increaseScore(); // bonus
+        increaseScore(levBonus); // bonus
         return GWSTATUS_FINISHED_LEVEL;
     }
     // if completed level
@@ -94,35 +120,62 @@ int StudentWorld::move() // this is basically the 'tick' method
 
 void StudentWorld::cleanUp()
 {
+//    int count = 0;
+//    for (list<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++)
+//    {
+//        count++;
+//    }
+//    for (int i = 0; i < count; i++)
+//    {
+//        Actor* temp = m_stage.back();
+//        m_stage.pop_back();
+//        delete temp;
+//    }
+    list<Actor*>::iterator q;
+    q = m_stage.begin();
+    
+    while(q != m_stage.end())
+    {
+        delete (*q);
+        q = m_stage.erase(q);
+    }
     
 }
 
 void StudentWorld::updateDisplayText() {
     
-//    int score = getCurrentScore();
-//    int level = getCurrentGameLevel();
-//    unsigned int bonus = getCurrentLevelBonus();
-//    int livesLeft = getNumberOfLivesThePlayerHasLeft();
-//    string perfString = "Score: " + to_string(score) + " Level: " + to_string(level) + " Lives: " + to_string(livesLeft) + " Health: " + to_string(m_player->getHealth()) + "% Ammo: " + to_string(m_player->getAmmo()) + " Bonus: " + to_string(bonus);
-//    setGameStatText(perfString);
+    int score = getScore();
+    int level = getLevel();
+    unsigned int bonus = getLevBonus();
+    int livesLeft = getLives();
+    int hp = m_player->getHealth();
+    setprecision(0);
+    string perfString = "Score: " + to_string(score) + " Level: " + to_string(level) + " Lives: " + to_string(livesLeft) + " Health: " + to_string((hp/20.0)*100) + "% Ammo: " + to_string(m_player->getAmmo()) + " Bonus: " + to_string(bonus);
+    setGameStatText(perfString);
     
 }
 
 int StudentWorld::levelLoader()
 {
     // LOAD UP YER LEVEL
-    std::string curL;
-    curL = "level02.dat";
+    Level lev(assetDirectory());
+//    Level::LoadResult result = lev.loadLevel(curL);
+    int levell = getLevel();
+    ostringstream strstrm;
+    strstrm.fill('0');
+    strstrm << "level" ;
+    strstrm << setw(2) << levell;
+    strstrm << ".dat";
+    string stir = strstrm.str();
+    Level::LoadResult res = lev.loadLevel(stir);
     
-    Level lev(assDir);
-    Level::LoadResult result = lev.loadLevel(curL);
     
-    if (result == Level::load_fail_file_not_found ||
-        result == Level::load_fail_bad_format)
-        return -1; // something bad happened!
+    if (res == Level::load_fail_file_not_found ||
+        res == Level::load_fail_bad_format)
+        cerr << "Bad levels" << endl; // something bad happened!
     
     
-    // FILL UP YER VECTOR OF ACTORS
+    // FILL UP YER list OF ACTORS
     for (int c = 0; c < VIEW_WIDTH; c++) // col loop
     {
         for (int r = 0; r < VIEW_HEIGHT; r++) // row loop
@@ -168,8 +221,10 @@ int StudentWorld::levelLoader()
                 if (atHand == Level::vert_snarlbot)
                     m_stage.push_back(new VerticalSnarlbot(c, r, this));
                 
-//                if (atHand == level::kleptobot_factory)
-//                    m_stage.push_back(new KleptobotFactory(c, r, this));
+                if (atHand == Level::angry_kleptobot_factory)
+                    m_stage.push_back(new KleptobotFactory(c, r, this, true));
+                if (atHand == Level::kleptobot_factory)
+                    m_stage.push_back(new KleptobotFactory(c, r, this, false));
                 
                 
                 
@@ -182,7 +237,7 @@ int StudentWorld::levelLoader()
 
 void StudentWorld::removeDeadGameObjects()
 {
-    for (vector<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++)
+    for (list<Actor*>::iterator q = m_stage.begin(); q != m_stage.end(); q++)
     {
         if ((*q)->amIDead() == true)
         {
@@ -190,6 +245,17 @@ void StudentWorld::removeDeadGameObjects()
             m_stage.erase(q);
         }
     }
+//    list<Actor*>::iterator q;
+//    q = m_stage.begin();
+//    
+//    while(q != m_stage.end())
+//    {
+//        if ((*q)->amIDead() == true)
+//        {
+//            delete (*q);
+//            q = m_stage.erase(q);
+//        }
+//    }
 }
 
 void StudentWorld::endLevel()
@@ -206,6 +272,10 @@ void StudentWorld::diagnostics()
     cout << "---------" << endl;
 }
 
+void StudentWorld::addActor(Actor* act)
+{
+    m_stage.push_back(act);
+}
 
 
 

@@ -1,0 +1,61 @@
+1. A high-level description of each of your public member functions in each of your classes, and why you chose to define each member function in its host class; also explain why (or why not) you decided to make each function virtual or pure virtual. For example, “I chose to define a pure virtual version of the sneeze() function in my base Actor class because all actors in Boulder Blast are able to sneeze, and each type of actor sneezes in a different way.”
+
+ACTOR
+
+Constructor -> Creates graph objects, sets the right IID, starts object as alive, provides indicator of homeworld. 
+
+Do something-> Does nothing here by way of being virtual and empty. Did not want Actor to be abstract, so this isn't pure virtual. 
+
+amIDead-> Get function for determining whether actor is dead.
+
+kill-> Set function for killing actor. 
+
+getWorld-> Get function for returning StudentWorld. 
+
+who-> Get function for Actor's IID. 
+
+hit-> Returns true if actor and bullet are on same square, kills bullet if actor is of right type. 
+
+canMove-> Generic version of bool function for whether actors face an obstacle directly in given direction. 
+
+moveUp/Down/Left/Right-> Functions to move actor one space in given direction. 
+
+getHealth() -> Get/set functions for Actors' hit points.
+setHealth() 
+
+get/set/add/decAmmo() -> various get/sets for controlling actors' amount of ammo. Not applicable or used in all cases, handy to have widely virtual.
+
+PLAYER
+constructor-> Initialize actor, life, ammo count, life count, default direction.
+
+doSomething-> Check for keystrokes, do something depending on the keystroke and depending on whether that something is possible. Make sure you're not dead. If you're hit, lose HP. If you hit a Goodie, gain goodies.
+
+getDirection-> Get function for player's direction. Handy to be virtual, widely applicable. 
+
+
+
+
+2. A list of all functionality that you failed to finish as well as known bugs in your classes, e.g. “I didn’t implement the Exit class.” or “My Angry KleptoBot doesn’t work correctly yet so I treat it like a KleptoBot right now.”
+
+Vertical Kleptobots are only partially implemented, so they freak out a little. 
+
+Bullets aren't working properly right now, they get created, but they fail to move correctly.
+
+Angry Kleptobots aren't yet implemented.
+
+Does not move level-to-level correctly, but does die correctly!
+
+3. A list of other design decisions and assumptions you made; e.g., “It was not specified what to do in situation X, so this is what I decided to do.”
+
+I use bullets weirdly. There's an actor function hit, basically instead of the bullet checking if it hit something, everything checks whether the bullet hit it. 
+
+4. A description of how you tested each of your classes (1-2 paragraphs per class).
+
+Play testing! Play testing everything!
+Sometimes, writing my own levels that isolated certain features and made them easier to examine. 
+Occasionally, slowing the framerate.
+
+
+
+I basically just ran out of time, so I can only hope for TA mercy. 
+Thanks, have a nice day!

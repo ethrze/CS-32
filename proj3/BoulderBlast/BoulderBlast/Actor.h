@@ -61,11 +61,8 @@ public:
     virtual bool canMove(Direction dir);
     
     virtual void moveUp();
-    
     virtual void moveDown();
-    
     virtual void moveLeft();
-    
     virtual void moveRight();
     
     virtual int getHealth() { return 0; }
@@ -255,7 +252,23 @@ private:
 class AngryKleptobot : public Kleptobot
 {
 public:
-    
+    AngryKleptobot(int sx, int sy, StudentWorld* world)
+    : Kleptobot(sx, sy, world), m_dead(0), m_health(5), m_tick(1), hasGoodie(0)
+    {
+        setDirection(right);
+        m_dir = right;
+        setVisible(true);
+        dBT = dbtGen();
+    }
+private:
+    Direction m_dir;
+    int dBT;
+    int m_health;
+    int m_tick;
+    int moves;
+    bool m_dead;
+    bool hasGoodie;
+    int stolenGoodie;
 };
 
 
@@ -279,6 +292,7 @@ public:
     virtual void kill() { } // we don't want walls to be killable, this is a failsafe.
     
     // Actor's doSomething class already does nothing. No need to override.
+    virtual void doSomething(); 
     
     virtual ~Wall();
 private:
@@ -326,7 +340,9 @@ public:
     
     virtual void kill() { m_dead = 1; }
     
-    virtual void doSomething();
+    virtual bool amIDead() { return m_dead; }
+    
+    void doSomething();
     
     virtual ~Bullet();
     

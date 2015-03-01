@@ -1,5 +1,6 @@
 #include "Actor.h"
 #include "StudentWorld.h"
+#include <list>
 #include <iostream>
 
 // Students:  Add code to this file (if you wish), Actor.h, StudentWorld.h, and StudentWorld.cpp
@@ -49,14 +50,16 @@ void Actor::moveRight()
 
 bool Actor::hit()
 {
-    vector<Actor*> thisStage = getWorld()->getStage();
-    for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+    list<Actor*> thisStage = getWorld()->getStage();
+    for (list<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
     {
-        if ((*q)->who() == IID_BULLET)
+        if ((*q)->who() == IID_BULLET && (*q)->amIDead() == false)
         {
             if(this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
+            {
                 (*q)->kill();
-            return true;
+                return true;
+            }
         }
     }
     return false;
@@ -65,6 +68,20 @@ bool Actor::hit()
 ////////////////
 //    WALL    //
 ////////////////
+
+void Wall::doSomething()
+{
+    // mostly we do nothing. 'cause we're a wall. 
+    if (hit())
+    {
+        list<Actor*> thisStage = getWorld()->getStage();
+        for (list<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+        {
+            if ((*q)->who() == IID_BULLET && getX() == (*q)->getX() && getY() == (*q)->getY())
+                (*q)->kill();
+        }
+    }
+}
 
 Wall::~Wall() {}
 
@@ -77,8 +94,8 @@ void Player::doSomething()
     if (amIDead() != true)
     {
         int ch;
-        vector<Actor*> thisStage = getWorld()->getStage();
-        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+        list<Actor*> thisStage = getWorld()->getStage();
+        for (list<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
         {
             if (getWorld()->getKey(ch))
             {
@@ -86,7 +103,7 @@ void Player::doSomething()
                 {
                     case KEY_PRESS_LEFT:
                         setDirection(left);
-                        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                        for (list<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
                         {
                             if ((*q)->who() == IID_BOULDER && this->getX()-1 == (*q)->getX() &&
                                 this->getY() == (*q)->getY())
@@ -103,7 +120,7 @@ void Player::doSomething()
                         break;
                     case KEY_PRESS_RIGHT:
                         setDirection(right);
-                        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                        for (list<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
                         {
                             if ((*q)->who() == IID_BOULDER && this->getX()+1 == (*q)->getX() &&
                                 this->getY() == (*q)->getY())
@@ -120,7 +137,7 @@ void Player::doSomething()
                     case KEY_PRESS_UP:
                         setDirection(up);
                         // THIS IS HOW WE MOVE BOULDERS
-                        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                        for (list<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
                         {
                             if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() &&
                                 this->getY() == (*q)->getY()-1)
@@ -136,7 +153,7 @@ void Player::doSomething()
                         break;
                     case KEY_PRESS_DOWN:
                         setDirection(down);
-                        for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
+                        for (list<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++)
                         {
                             if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() &&
                                 this->getY() == (*q)->getY()+1)
@@ -152,23 +169,45 @@ void Player::doSomething()
                         
                         break;
                     case KEY_PRESS_ESCAPE:
-                        //                        getWorld()->decLives();
-                        getWorld()->diagnostics();
+                        if (getWorld()->getLives() != 0)
+                            getWorld()->decLives();
+                        if (getWorld()->getLives() == 0)
+                            kill();
+//                        getWorld()->diagnostics();
                         break;
                     case KEY_PRESS_SPACE:
                         // fire bullet if there is ammo!
+                        if (m_ammo != 0)
+                        {
+                            decAmmo();
+                            if (GraphObject::getDirection() == left)
+                                if (getX() - 1 >= 0)
+                                    getWorld()->addActor(new Bullet(getX()-1, getY(), getWorld(), left));
+                            if (GraphObject::getDirection() == right)
+                                if (getX() + 1 < VIEW_WIDTH)
+                                    getWorld()->addActor(new Bullet(getX()+1, getY(), getWorld(), right));
+                            if (GraphObject::getDirection() == down)
+                                if (getY() - 1 >= 0)
+                                    getWorld()->addActor(new Bullet(getX(), getY()-1, getWorld(), down));
+                            if (GraphObject::getDirection() == up)
+                                if (getY() + 1 < VIEW_HEIGHT)
+                                    getWorld()->addActor(new Bullet(getX(), getY()+1, getWorld(), up));
+                            getWorld()->playSound(SOUND_PLAYER_FIRE);
+                        }
                         break;
+                        
                 }
             }
         }
         if (hit())
         {
             decHealth(2);
+            getWorld()->playSound(SOUND_PLAYER_IMPACT);
         }
-        if (m_health == 0)
+        if (getHealth() == 0)
         {
             kill();
-            
+            getWorld()->playSound(SOUND_PLAYER_DIE);
         }
     }
     else
@@ -181,10 +220,10 @@ void Player::doSomething()
 bool Player::canMove(Direction dir)
 {
     int count =0;
-    vector<Actor*> thisStage = getWorld()->getStage();
+    list<Actor*> thisStage = getWorld()->getStage();
     int xCol = this->getX();
     int yRow = this->getY();
-    for (vector<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++) // all actors loop
+    for (list<Actor*>::iterator q = thisStage.begin(); q != thisStage.end(); q++) // all actors loop
     {
         if (dir == up)
         {
@@ -258,8 +297,8 @@ bool Robot::canMove(Direction dir)
     int count = 0;
     int xCol = this->getX();
     int yRow = this->getY();
-    vector<Actor*> ourStage = getWorld()->getStage();
-    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
+    list<Actor*> ourStage = getWorld()->getStage();
+    for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
     {
         if (dir == left)
         {
@@ -339,22 +378,22 @@ void HorizontalSnarlbot::doSomething() // omnidir
             if (getDirection() == left)
             {
                 Actor* bull = new Bullet(getX()-1, getY(), getWorld(), left);
-                getWorld()->getStage().push_back(bull);
+                getWorld()->addActor(bull);
             }
             if (getDirection() == right)
             {
                 Actor* bull = new Bullet(getX()+1, getY(), getWorld(), right);
-                getWorld()->getStage().push_back(bull);
+                getWorld()->addActor(bull);
             }
             if (getDirection() == down)
             {
                 Actor* bull = new Bullet(getX(), getY()-1, getWorld(), down);
-                getWorld()->getStage().push_back(bull);
+                getWorld()->addActor(bull);
             }
             if (getDirection() == up)
             {
                 Actor* bull = new Bullet(getX(), getY()+1, getWorld(), up);
-                getWorld()->getStage().push_back(bull);
+                getWorld()->addActor(bull);
             }
             getWorld()->playSound(SOUND_ENEMY_FIRE);
         }
@@ -395,8 +434,8 @@ bool HorizontalSnarlbot::canMove(Direction dir) // omnidir
     int count = 0;
     int xCol = this->getX();
     int yRow = this->getY();
-    vector<Actor*> ourStage = getWorld()->getStage();
-    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
+    list<Actor*> ourStage = getWorld()->getStage();
+    for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
     {
         if (dir == left)
         {
@@ -508,8 +547,8 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // om
 {
     if (dir == right)
     {
-        vector<Actor*> ourStage = getWorld()->getStage();
-        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        list<Actor*> ourStage = getWorld()->getStage();
+        for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
         {
             for (int i = xCols; i < pxCols; i++)
             {
@@ -523,8 +562,8 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // om
     }
     if (dir == left)
     {
-        vector<Actor*> ourStage = getWorld()->getStage();
-        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        list<Actor*> ourStage = getWorld()->getStage();
+        for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
         {
             for (int i = xCols; i >= pxCols; i--)
             {
@@ -538,8 +577,8 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // om
     }
     if (dir == up)
     {
-        vector<Actor*> ourStage = getWorld()->getStage();
-        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        list<Actor*> ourStage = getWorld()->getStage();
+        for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
         {
             for (int i = xCols; i < pxCols; i++)
             {
@@ -553,8 +592,8 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // om
     }
     if (dir == down)
     {
-        vector<Actor*> ourStage = getWorld()->getStage();
-        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        list<Actor*> ourStage = getWorld()->getStage();
+        for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
         {
             for (int i = xCols; i >= pxCols; i--)
             {
@@ -592,8 +631,8 @@ void Kleptobot::doSomething()
     if (m_tick == tickGen())
     {
         
-        vector<Actor*> ourStage = getWorld()->getStage();
-        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        list<Actor*> ourStage = getWorld()->getStage();
+        for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
         {
             if ( ((*q)->who() == IID_EXTRA_LIFE || (*q)->who() == IID_RESTORE_HEALTH || (*q)->who() == IID_AMMO) &&
                 (*q)->getX() == this->getX() && (*q)->getY() == this->getY() && hasGoodie == false)
@@ -690,6 +729,11 @@ void Kleptobot::doSomething()
 ////////////////
 void Boulder::doSomething()
 {
+    if (hit())
+    {
+        hitPts -= 2;
+        
+    }
     if (hitPts == 0)
         kill();
 }
@@ -699,8 +743,8 @@ bool Boulder::canMove(Direction dir)
     int count = 0;
     int xCol = this->getX();
     int yRow = this->getY();
-    vector<Actor*> ourStage = getWorld()->getStage();
-    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
+    list<Actor*> ourStage = getWorld()->getStage();
+    for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++) // find boulder
     {
         if (dir == up)
         {
@@ -756,13 +800,13 @@ Boulder::~Boulder() { }
 void Bullet::doSomething()
 {
     if (m_dir == left)
-        moveLeft();
+        Actor::moveLeft();
     if (m_dir == right)
-        moveRight();
+        Actor::moveRight();
     if (m_dir == up)
-        moveUp();
+        Actor::moveUp();
     if (m_dir == down)
-        moveDown();
+        Actor::moveDown();
 }
 
 Bullet::~Bullet() { }
@@ -773,8 +817,8 @@ Bullet::~Bullet() { }
 
 void Hole::doSomething()
 {
-    vector<Actor*> ourStage = getWorld()->getStage();
-    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+    list<Actor*> ourStage = getWorld()->getStage();
+    for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
     {
         if ((*q)->who() == IID_BOULDER && this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
         {
@@ -794,8 +838,8 @@ void Exit::doSomething()
 {
     /* this bit works */
     int count = 0;
-    vector<Actor*> ourStage = getWorld()->getStage();
-    for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+    list<Actor*> ourStage = getWorld()->getStage();
+    for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
     {
         if ((*q)->who() == IID_JEWEL)
             count++;
@@ -899,13 +943,15 @@ void KleptobotFactory::doSomething()
     {
         for (int c = lowColBound; c <= highColBound; c++)
         {
-            vector<Actor*> ourStage = getWorld()->getStage();
-            for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+            list<Actor*> ourStage = getWorld()->getStage();
+            for (list<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
             {
                 if((*q)->getX() == c && (*q)->getX() == r)
                     count++;
-                if((*q)->getX() == getX() && (*q)->getY() == getY())
+                else if((*q)->getX() == getX() && (*q)->getY() == getY())
                     flag = true;
+                else
+                    flag = false;
             }
             
         }
@@ -918,11 +964,11 @@ void KleptobotFactory::doSomething()
             getWorld()->playSound(SOUND_ROBOT_BORN);
             if (angry == true)
             {
-//                Actor* baby = new AngryKleptobot(getX(), getY(), getWorld());
-//                getWorld()->getStage().push_back(baby);
+                Actor* baby = new AngryKleptobot(getX(), getY(), getWorld());
+                getWorld()->addActor(baby);
             } else {
                 Actor* baby = new Kleptobot(getX(), getY(), getWorld());
-                getWorld()->getStage().push_back(baby);
+                getWorld()->addActor(baby);
             }
         } // end probability if
     } // end sensical if

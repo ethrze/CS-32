@@ -5,7 +5,7 @@
 #include "GameConstants.h"
 #include "Actor.h"
 #include <string>
-#include <vector>
+#include <list>
 
 using namespace std;
 
@@ -43,7 +43,7 @@ public:
         return m_player;
     }
     
-    virtual vector<Actor*> getStage()
+    virtual list<Actor*> getStage()
     {
         return m_stage;
     }
@@ -66,7 +66,15 @@ public:
             m_score-=minu;
         m_score = 0;
     }
-    virtual void decLevBonus() { levBonus--; }
+    virtual void decLevBonus()
+    {
+        if (levBonus != 0)
+            levBonus--;
+    }
+    virtual int getLevBonus() { return levBonus; }
+    virtual void resetBonus() { levBonus = 1000; }
+    
+    virtual void addActor(Actor* act); 
     
     virtual void removeDeadGameObjects();
 
@@ -79,7 +87,7 @@ private:
 
     std::string assDir;
     
-    std::vector<Actor*> m_stage;
+    std::list<Actor*> m_stage;
     
     Actor* m_player;
     
