@@ -112,7 +112,7 @@ int StudentWorld::levelLoader()
 {
     // LOAD UP YER LEVEL
     std::string curL;
-    curL = "level03.dat";
+    curL = "level02.dat";
     
     Level lev(assDir);
     Level::LoadResult result = lev.loadLevel(curL);

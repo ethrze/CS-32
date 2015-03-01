@@ -243,7 +243,7 @@ Player::~Player() {}
 // SNARLBOT
 int Robot::tickGen() // omnidir
 {
-    int levelNumber = 3;
+    int levelNumber = 2;
     int ticks = (28 - levelNumber) / 4; // levelNumber is the current
     // level number (0, 1, 2, etc.)
     if (ticks < 3)
@@ -627,6 +627,7 @@ void Kleptobot::doSomething()
         {
             // pick random new dBT
             dBT = dbtGen();
+            moves = 0;
             // pick random new direction
             getRandDir();
             
@@ -872,3 +873,64 @@ void Ammo::goodieSpec()
 {
     getWorld()->getPlayer()->addAmmo(20);
 }
+
+////////////////
+//ROBOT FACTORY/
+////////////////
+void KleptobotFactory::doSomething()
+{
+    int count = 0;
+    int lowColBound = getX() - 3;
+    int highColBound = getX() + 3;
+    int lowRowBound = getY() - 3;
+    int highRowBound = getY() + 3;
+    if (getY() - 3 < 0)
+        lowRowBound = 0;
+    if (getY() + 3 >= VIEW_HEIGHT)
+        highRowBound = VIEW_HEIGHT-1;
+    if (getX() - 3 < 0)
+        lowColBound = 0;
+    if (getX() + 3 >= VIEW_WIDTH)
+        highColBound = VIEW_WIDTH-1;
+    
+    
+    bool flag = false;
+    for (int r = lowRowBound; r <= highRowBound; r++)
+    {
+        for (int c = lowColBound; c <= highColBound; c++)
+        {
+            vector<Actor*> ourStage = getWorld()->getStage();
+            for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+            {
+                if((*q)->getX() == c && (*q)->getX() == r)
+                    count++;
+                if((*q)->getX() == getX() && (*q)->getY() == getY())
+                    flag = true;
+            }
+            
+        }
+    }
+    if (count < 3 && flag != true)
+    {
+        if ( 3 == rand() % 50) // that 1 in 50 chance
+        {
+            // honey, we're having a kleptobot!
+            getWorld()->playSound(SOUND_ROBOT_BORN);
+            if (angry == true)
+            {
+//                Actor* baby = new AngryKleptobot(getX(), getY(), getWorld());
+//                getWorld()->getStage().push_back(baby);
+            } else {
+                Actor* baby = new Kleptobot(getX(), getY(), getWorld());
+                getWorld()->getStage().push_back(baby);
+            }
+        } // end probability if
+    } // end sensical if
+    
+}
+
+
+
+
+
+

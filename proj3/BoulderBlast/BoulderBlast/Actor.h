@@ -252,6 +252,12 @@ private:
     int m_tick;
 };
 
+class AngryKleptobot : public Kleptobot
+{
+public:
+    
+};
+
 
 /*  / / / / / / / / / / / / /
         INANIMATE OBJECTS
@@ -505,17 +511,17 @@ private:
 // / / / / / / / / / / //
 class KleptobotFactory : public Actor {
 public:
-    KleptobotFactory(int sx, int sy, StudentWorld* world)
-    : Actor(IID_ROBOT_FACTORY, sx, sy, world)
+    KleptobotFactory(int sx, int sy, StudentWorld* world, bool angerSwitch)
+    : Actor(IID_ROBOT_FACTORY, sx, sy, world), angry(angerSwitch)
     {
         setVisible(true);
         setDirection(none);
     }
     
-    
+    virtual void doSomething(); 
     
 private:
-
+    bool angry;
     
 };
 
