@@ -246,7 +246,7 @@ Player::~Player() {}
 ////////////////
 //  HSNARLBOT //
 ////////////////
-void HorizontalSnarlbot::doSomething()
+void HorizontalSnarlbot::doSomething() // omnidir
 {
     if (amIDead() == true)
         return;
@@ -272,6 +272,16 @@ void HorizontalSnarlbot::doSomething()
                 Actor* bull = new Bullet(getX()+1, getY(), getWorld(), right);
                 getWorld()->getStage().push_back(bull);
             }
+            if (getDirection() == down)
+            {
+                Actor* bull = new Bullet(getX(), getY()-1, getWorld(), down);
+                getWorld()->getStage().push_back(bull);
+            }
+            if (getDirection() == up)
+            {
+                Actor* bull = new Bullet(getX(), getY()+1, getWorld(), up);
+                getWorld()->getStage().push_back(bull);
+            }
             getWorld()->playSound(SOUND_ENEMY_FIRE);
         }
         
@@ -282,6 +292,10 @@ void HorizontalSnarlbot::doSomething()
                 moveLeft();
             if (getDirection() == right)
                 moveRight();
+            if (getDirection() == down)
+                moveDown();
+            if (getDirection() == up)
+                moveUp();
         }
         
         if (hit())
@@ -302,7 +316,7 @@ void HorizontalSnarlbot::doSomething()
     }
 }
 
-bool HorizontalSnarlbot::canMove(Direction dir)
+bool HorizontalSnarlbot::canMove(Direction dir) // omnidir
 {
     int count = 0;
     int xCol = this->getX();
@@ -332,6 +346,28 @@ bool HorizontalSnarlbot::canMove(Direction dir)
             if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
                 count++;
         }
+        if (dir == up)
+        {
+            if (yRow + 1 >= VIEW_HEIGHT)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_HOLE && (*q)->getY()+1 == yRow && (*q)->getX() == xCol)
+                count++;
+        }
+        if (dir == down)
+        {
+            if (yRow - 1 < 0)
+                count++;
+            if ((*q)->who() == IID_WALL && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_BOULDER && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                count++;
+            if ((*q)->who() == IID_HOLE && (*q)->getY()-1 == yRow && (*q)->getX() == xCol)
+                count++;
+        }
     }
     if (count != 0)
     {
@@ -339,12 +375,16 @@ bool HorizontalSnarlbot::canMove(Direction dir)
             setDirection(right);
         if (dir == right)
             setDirection(left);
+        if (dir == up)
+            setDirection(down);
+        if (dir == down)
+            setDirection(up);
         return false;
     }
     return true;
 }
 
-bool HorizontalSnarlbot::shouldShoot(Direction dir)
+bool HorizontalSnarlbot::shouldShoot(Direction dir) // omnidir
 {
     if (dir == left)
     {
@@ -364,10 +404,28 @@ bool HorizontalSnarlbot::shouldShoot(Direction dir)
         }
         return false;
     }
+    if (dir == down)
+    {
+        if (getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() < this-> getY() && noObstacles(this->getY(), getWorld()->getPlayer()->getY(), dir))
+        {
+            // SHOOT
+            return true;
+        }
+        return false;
+    }
+    if (dir == up)
+    {
+        if (getWorld()->getPlayer()->getX() == this->getX() && getWorld()->getPlayer()->getY() > this-> getY() && noObstacles(this->getY(), getWorld()->getPlayer()->getY(), dir))
+        {
+            // SHOOT
+            return true;
+        }
+        return false;
+    }
     return false; // shouldn't make it here
 }
 
-int HorizontalSnarlbot::tickGen()
+int HorizontalSnarlbot::tickGen() // omnidir
 {
     int levelNumber = 2;
     int ticks = (28 - levelNumber) / 4; // levelNumber is the current
@@ -377,7 +435,8 @@ int HorizontalSnarlbot::tickGen()
     
     return ticks;
 }
-bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir)
+
+bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir) // omnidir
 {
     if (dir == right)
     {
@@ -402,6 +461,36 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir)
             for (int i = xCols; i >= pxCols; i--)
             {
                 if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) && this->getY() == (*q)->getY() && i == (*q)->getX())
+                {
+                    return false;
+                }
+                
+            }
+        }
+    }
+    if (dir == up)
+    {
+        vector<Actor*> ourStage = getWorld()->getStage();
+        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        {
+            for (int i = xCols; i < pxCols; i++)
+            {
+                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) && this->getX() == (*q)->getX() && i == (*q)->getY())
+                {
+                    return false;
+                }
+                
+            }
+        }
+    }
+    if (dir == down)
+    {
+        vector<Actor*> ourStage = getWorld()->getStage();
+        for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
+        {
+            for (int i = xCols; i >= pxCols; i--)
+            {
+                if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) && this->getX() == (*q)->getX() && i == (*q)->getY())
                 {
                     return false;
                 }

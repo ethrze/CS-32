@@ -153,6 +153,22 @@ private:
     int m_tick;
 };
 
+class VerticalSnarlbot : public HorizontalSnarlbot {
+public:
+    VerticalSnarlbot(int sx, int sy, StudentWorld* world)
+    : HorizontalSnarlbot(sx, sy, world), m_dead(0), m_health(10)
+    {
+        setDirection(down);
+        setVisible(true);
+        m_tick = 1;
+    }
+    
+    ~VerticalSnarlbot() {}
+private:
+    bool m_dead;
+    int m_health;
+    int m_tick;
+};
 
 
 /*  / / / / / / / / / / / / /
