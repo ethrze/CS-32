@@ -55,6 +55,7 @@ bool Actor::hit()
         if ((*q)->who() == IID_BULLET)
         {
             if(this->getX() == (*q)->getX() && this->getY() == (*q)->getY())
+                (*q)->kill();
                 return true;
         }
     }
@@ -160,6 +161,15 @@ void Player::doSomething()
                 }
             }
         }
+        if (hit())
+        {
+            decHealth(2);
+        }
+        if (m_health == 0)
+        {
+            kill();
+            
+        }
     }
     else
     {
@@ -232,27 +242,41 @@ Player::~Player() {}
 
 // SNARLBOT
 
+
+////////////////
+//  HSNARLBOT //
+////////////////
 void HorizontalSnarlbot::doSomething()
 {
     if (amIDead() == true)
         return;
-    if (m_tick != 0)
+    if (m_tick != tickGen())
     {
-        tickMachine();
+        m_tick++;
         return;
     }
-    if (m_tick == 0)
+    if (m_tick == tickGen())
     {
         // try to shoot
         if (shouldShoot(getDirection()))
         {
             // FIRE BULLET!
             // GIVE BULLET TO STUDENT WORLD!
+            if (getDirection() == left)
+            {
+                Actor* bull = new Bullet(getX()-1, getY(), getWorld(), left);
+                getWorld()->getStage().push_back(bull);
+            }
+            if (getDirection() == right)
+            {
+                Actor* bull = new Bullet(getX()+1, getY(), getWorld(), right);
+                getWorld()->getStage().push_back(bull);
+            }
             getWorld()->playSound(SOUND_ENEMY_FIRE);
         }
         
         // try to move
-        if (canMove(getDirection()))
+        else if (canMove(getDirection()))
         {
             if (getDirection() == left)
                 moveLeft();
@@ -267,19 +291,15 @@ void HorizontalSnarlbot::doSomething()
                 m_health -= 2;
                 getWorld()->playSound(SOUND_ROBOT_IMPACT);
             }
-            if (amIDead())
+            if (m_health == 0)
             {
                 kill();
                 getWorld()->playSound(SOUND_ROBOT_DIE);
                 getWorld()->increaseScore(100);
             }
-            
         }
-        
-        
+        m_tick = 1;
     }
-    
-    
 }
 
 bool HorizontalSnarlbot::canMove(Direction dir)
@@ -298,6 +318,8 @@ bool HorizontalSnarlbot::canMove(Direction dir)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
                 count++;
+            if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol-1)
+                count++;
         }
         if (dir == right)
         {
@@ -306,6 +328,8 @@ bool HorizontalSnarlbot::canMove(Direction dir)
             if ((*q)->who() == IID_WALL && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
                 count++;
             if ((*q)->who() == IID_BOULDER && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
+                count++;
+            if ((*q)->who() == IID_HOLE && (*q)->getY() == yRow && (*q)->getX() == xCol+1)
                 count++;
         }
     }
@@ -322,12 +346,25 @@ bool HorizontalSnarlbot::canMove(Direction dir)
 
 bool HorizontalSnarlbot::shouldShoot(Direction dir)
 {
-    if (getWorld()->getPlayer()->getY() == this->getY() && noObstacles(this->getX(), this->getY(), dir))
+    if (dir == left)
     {
-        // SHOOT
-        return true;
+        if (getWorld()->getPlayer()->getY() == this->getY() && getWorld()->getPlayer()->getX() < this-> getX() && noObstacles(this->getX(), getWorld()->getPlayer()->getX(), dir))
+        {
+            // SHOOT
+            return true;
+        }
+        return false;
     }
-    return false;
+    if (dir == right)
+    {
+        if (getWorld()->getPlayer()->getY() == this->getY() && getWorld()->getPlayer()->getX() > this-> getX() && noObstacles(this->getX(), getWorld()->getPlayer()->getX(), dir))
+        {
+            // SHOOT
+            return true;
+        }
+        return false;
+    }
+    return false; // shouldn't make it here
 }
 
 int HorizontalSnarlbot::tickGen()
@@ -340,14 +377,14 @@ int HorizontalSnarlbot::tickGen()
     
     return ticks;
 }
-bool HorizontalSnarlbot::noObstacles(int xCols, int yRows, Direction dir)
+bool HorizontalSnarlbot::noObstacles(int xCols, int pxCols, Direction dir)
 {
     if (dir == right)
     {
         vector<Actor*> ourStage = getWorld()->getStage();
         for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
         {
-            for (int i = xCols; i < VIEW_WIDTH; i++)
+            for (int i = xCols; i < pxCols; i++)
             {
                 if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) && this->getY() == (*q)->getY() && i == (*q)->getX())
                 {
@@ -362,7 +399,7 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int yRows, Direction dir)
         vector<Actor*> ourStage = getWorld()->getStage();
         for (vector<Actor*>::iterator q = ourStage.begin(); q != ourStage.end(); q++)
         {
-            for (int i = xCols; i >= 0; i--)
+            for (int i = xCols; i >= pxCols; i--)
             {
                 if (((*q)->who() == IID_WALL || (*q)->who() == IID_BOULDER) && this->getY() == (*q)->getY() && i == (*q)->getX())
                 {
@@ -375,11 +412,17 @@ bool HorizontalSnarlbot::noObstacles(int xCols, int yRows, Direction dir)
     return true;
 }
 
-void HorizontalSnarlbot::tickMachine()
-{
-    m_tick--; 
-}
+////////////////
+//  VSNARLBOT //
+////////////////
 
+
+
+
+
+////////////////
+//   BOULDER  //
+////////////////
 void Boulder::doSomething()
 {
     if (hitPts == 0)
@@ -438,13 +481,26 @@ bool Boulder::canMove(Direction dir)
 
 Boulder::~Boulder() { }
 
-
+////////////////
+//   BULLET   //
+////////////////
 void Bullet::doSomething()
 {
-    
+    if (m_dir == left)
+        moveLeft();
+    if (m_dir == right)
+        moveRight();
+    if (m_dir == up)
+        moveUp();
+    if (m_dir == down)
+        moveDown();
 }
 
 Bullet::~Bullet() { }
+
+////////////////
+//    HOLE    //
+////////////////
 
 void Hole::doSomething()
 {
@@ -461,6 +517,10 @@ void Hole::doSomething()
 
 Hole::~Hole() { }
 
+
+////////////////
+//    EXIT    //
+////////////////
 void Exit::doSomething()
 {
     /* this bit works */
@@ -491,7 +551,9 @@ void Exit::doSomething()
 
 Exit::~Exit() { }
 
-
+////////////////
+//   GOODIE   //
+////////////////
 void Goodie::doSomething()
 {
     if (amIDead())
@@ -510,21 +572,33 @@ void Goodie::givePoints()
     getWorld()->increaseScore(this->getPoints());
 }
 
+////////////////
+//    JEWEL   //
+////////////////
 void Jewel::goodieSpec()
 {
     
 }
 
+////////////////
+//   X LIFE   //
+////////////////
 void ExtraLifeGoodie::goodieSpec()
 {
     getWorld()->incLives();
 }
 
+////////////////
+//  HEALTH G  //
+////////////////
 void RestoreHealthGoodie::goodieSpec()
 {
     getWorld()->getPlayer()->setHealth(20);
 }
 
+////////////////
+//    AMMO    //
+////////////////
 void Ammo::goodieSpec()
 {
     getWorld()->getPlayer()->addAmmo(20);

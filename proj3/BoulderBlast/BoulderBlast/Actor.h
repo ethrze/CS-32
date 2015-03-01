@@ -104,6 +104,7 @@ public:
     
     virtual int getHealth() { return m_health; }
     virtual void setHealth(int num) { m_health = num; }
+    virtual void decHealth(int num) { m_health -= num; }
     
     virtual int getAmmo() { return m_ammo; }
     void setAmmo(int num) { m_ammo = num; }
@@ -132,7 +133,7 @@ public:
     {
         setDirection(right);
         setVisible(true);
-        m_tick = tickGen();
+        m_tick = 1;
         
     }
     
@@ -143,7 +144,6 @@ public:
     virtual bool noObstacles(int xCols, int yRows, Direction dir);
     
     virtual int tickGen(); 
-    virtual void tickMachine();
     
     virtual ~HorizontalSnarlbot() {}
     
@@ -213,7 +213,7 @@ private:
 class Bullet : public Actor {
 public:
     Bullet(int sx, int sy, StudentWorld* world, Direction dir)
-    : Actor(IID_BULLET, sx, sy, world), m_dead(0)
+    : Actor(IID_BULLET, sx, sy, world), m_dead(0), m_dir(dir)
     {
         setVisible(true);
         setDirection(dir);
@@ -227,6 +227,7 @@ public:
     
 private:
     bool m_dead;
+    Direction m_dir;
 };
 // / / / / / / / / / / //
 //         HOLE        //  isn't even a great band...

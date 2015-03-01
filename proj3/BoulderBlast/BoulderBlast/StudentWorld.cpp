@@ -61,7 +61,6 @@ int StudentWorld::move() // this is basically the 'tick' method
             // if completed level
                 // increase score
                 // return GWSTATUS_FINISHED_LEVEL
-            
         }
     } // end all actors loop
     
