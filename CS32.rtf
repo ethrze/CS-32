@@ -1185,4 +1185,28 @@ f(N) is O(N^2)  \
 A function F(N) is O(g(N)) if there exist N0 and k such that for all N >= Nm,  |f(n)| <= k*g(N)\
 \
 f(N) = 2N^2+5N+7\
-f(N) is O(N^2), since for all N >= 10, |f(N)| < 20N^2}
+f(N) is O(N^2), since for all N >= 10, |f(N)| < 20N^2\
+\
+\
+\
+\
+				lookup			insertion/deletion\
+unsorted array 		O(N)				O(1)\
+sorted array		O(logN)			O(N)\
+hash table with		O(N)				O(N)	with a very small constant of proportionality // only lose with linear whatever with REALLY LARGE N\
+	fixed buckets	\
+hash table with		O(1)				O(1) // on average\
+  	fixed loadFact	\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}
