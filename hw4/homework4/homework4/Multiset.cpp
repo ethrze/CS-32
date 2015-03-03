@@ -73,6 +73,7 @@ Multiset& Multiset::operator=(const Multiset& rhs)
     return *this;
 }
 
+template<typename ItemType>
 bool Multiset::insert(const ItemType& value)
 {
     Node* p = find(value);

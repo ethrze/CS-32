@@ -27,6 +27,7 @@ public:
     // the uniqueSize of a multiset containing "cumin", "cumin", "cumin",
     // "turmeric" is 2.
     
+    template<typename ItemType>
     bool insert(const ItemType& value);
     // Insert value into the multiset.  Return true if the value was
     // actually inserted.  Return false if the value was not inserted
@@ -92,11 +93,12 @@ private:
 };
 
 // Declarations of non-member functions
-
+template<typename ItemType>
 void combine(const Multiset& ms1, const Multiset& ms2, Multiset& result);
 // If a value occurs n1 times in ms1 and n2 times in ms2, then
 // it will occur n1+n2 times in result upon return from this function.
 
+template<typename ItemType>
 void subtract(const Multiset& ms1, const Multiset& ms2, Multiset& result);
 // If a value occurs n1 times in ms1 and n2 times in ms2, then
 // it will occur n1-n2 times in result upon return from this function
