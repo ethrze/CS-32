@@ -46,16 +46,22 @@ CompoundMenuItem::~CompoundMenuItem()
         delete m_menuItems[k];
 }
 
+
+
+
+
+
+
+
 void listAll(const MenuItem* m, string path) // two-parameter overload
 {
 //    You will write this code.
     //cout << "Call Trace: " << path << endl;
     string temp = path;
-    if (path != "") // if you're not starting from scratch or just being directed over from the one-parameter version
+    if (path != "")                 // if you're not starting from scratch or just being directed over from the one-parameter version
     {
         cout << path << endl;
         temp = path + "/";
-        
     }
     if (m->menuItems()->empty()) { // this'll get called when you've run a complete path
         cout << path << endl; }
@@ -63,7 +69,7 @@ void listAll(const MenuItem* m, string path) // two-parameter overload
     {
         const vector<MenuItem*>* miv = m->menuItems();
 //        cout << "SIZE" << miv->size() << endl;
-        for (size_t n = 0; n != miv->size(); n++) // what is size_t
+        for (int n = 0; n != miv->size(); n++) // what is size_t
         {
             // this is the problem part
 //            cout << "IDX" << n << endl;
@@ -79,6 +85,12 @@ void listAll(const MenuItem* m, string path) // two-parameter overload
         }
     }
 }
+
+
+
+
+
+
 
 void listAll(const MenuItem* m)  // one-parameter overload
 {
