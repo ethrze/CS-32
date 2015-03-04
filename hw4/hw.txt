@@ -1,0 +1,20 @@
+hw.txt
+
+2. 
+Probably because there is no destructor written for URL, whereas int and string both have perfectly acceptable default destructors. When insert is called on the URL Multiset using a temporary URL as a parameter, the destructor is meant to be called on that temporary URL when everything is over and done with, but there is no such destructor. 
+
+
+3b. 
+You need path if you're going to use recursion/aren't allowed to have a stack. In order to keep moving down a limb of the tree, you have to be able to print the full path, for instance, if you get to "Window" without a way of having passed "File/New" along, the program isn't going to work out with this design.
+
+4a. 
+I would venture O(n^3). The main time-suck of this problem is running three /nested/ loops, all of which go through what is possibly a very large N. 
+
+4b. 
+It seems like it would also be O(N^3)? The second loop, the one that's been altered, should still go through about N terms, even though the comparison operator that ends it is now based on two variables that are also looping? I thought for a while it could've been O(N^2logN), but no, probably not. 
+
+5a. 
+The time complexity should be n^2, due to the swap function and the for loop. 
+
+5b. 
+I think the average case time complexity is NlogN, the sort seems to be the highest order of them all. On average, this should do better than the implementation in 5a. 
