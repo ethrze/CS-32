@@ -1218,15 +1218,80 @@ int main()\
 		ious[name] += amt; // looks up name in map, creates new pair if doesn't already exist. sets amt to 0, returns ref to double.\
 	// that'll build up the whole hash table!\
 \
-	\
+	// in C++98\
+//	for (unordered_map<string,double>::iterator p = ious.begin(); p != ious.end(); p++) // that's ugly. \
+//		cout << p->first << "owes me $" << p->second << endl;\
+	// in C++11\
+	for (auto p = ious.begin(); p != ious.end(); p++)\
+		cout << p->first << "owes me $" << p->second << endl;\
+	// C++11 range-based for\
+	for (auto pr: ious) // I want to go through every item in the container, beginning to end. pr will be a copy of each item in the container\
+		cout << pr.first << " owes me $" << p->second << endl;\
+	for (auto& pr : ious) // omg too good\
+		pr.second += 3; \
 \}\
 \
 \
 \
 \
+TREE\
+\
+node\
+edge\
+path\
+parent/child\
+root\
+leaf (no children)\
+interior node / non-leaf (w/ children)\
+depth goes into the leaves\
+height of the tree (max depth)\
 \
 \
 \
 \
+struct Node \
+\{\
+	string name;\
+	vector<Node*> child;\
+\};\
+Node* root; \
 \
+int count(const Node* p)\
+\{\
+	if (p == nullptr)\
+		return 0; // empty tree\
+	int total = 0; \
+	for (int k = 0; k !- p->child.size(); k++)\
+		total += count(p->child[k]); \
+	return total;\
+\}\
+\
+void print(const Node* p)\
+\{\
+	if ( p != nullptr)\
+	\{\
+		cout << p->name << endl;\
+		for (int k = 0; k !- p->child.size(); k++)\
+			print(p->child[k]); \
+	\}\
+	\
+\}\
+\
+Elizabeth\
+	Charles\
+		William\
+			George\
+		Harry\
+	Anne\
+		Peter\
+			Savannah\
+			Isla\
+		Zara\
+			Mia\
+	Andrew\
+		Beatrice\
+		Eugenie\
+	Edward\
+		Louise\
+		James\
 }
