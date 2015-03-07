@@ -2,4 +2,4 @@ report.txt
 Project 4
 Grace Phillips // tired CS32 student
 
-1. Whether any of your classes have bugs or other problems that we should know about.2. Whether or not each satisfies our big-O requirements, and if not, what you did instead and what the big-O is for your version.3. How three of your methods work – use high-level pseudocode to describe these:	• HashTable’s set() method	• HashTable’s touch() method	• HashTable’s discard() method
+1. Whether any of your classes have bugs or other problems that we should know about.2. Whether or not each satisfies our big-O requirements, and if not, what you did instead and what the big-O is for your version.3. How three of your methods work – use high-level pseudocode to describe these:	• HashTable’s set() method	• HashTable’s touch() method	• HashTable’s discard() method
