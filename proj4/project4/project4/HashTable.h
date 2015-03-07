@@ -35,7 +35,7 @@ private:
     private:
         int m_value;
         int m_age;
-        Node* m_root; // in this example, every bucket seems to just have one value. 
+        Node* m_root; // in this example, every bucket seems to just have one value.
     }
     // We prevent a HashTable from being copied or assigned by declaring the
     // copy constructor and assignment operator private and not implementing them.
