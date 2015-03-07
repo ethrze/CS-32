@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		AD7CA4FE1AAAA1BA00CA24DE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD7CA4FD1AAAA1BA00CA24DE /* main.cpp */; };
 		AD7CA5061AAAA1C600CA24DE /* HashTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD7CA5041AAAA1C600CA24DE /* HashTable.cpp */; };
+		AD7CA50E1AAABAA500CA24DE /* BinaryConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD7CA5071AAABAA500CA24DE /* BinaryConverter.cpp */; };
+		AD7CA50F1AAABAA500CA24DE /* Compressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD7CA5081AAABAA500CA24DE /* Compressor.cpp */; };
+		AD7CA5101AAABAA500CA24DE /* Steg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD7CA50B1AAABAA500CA24DE /* Steg.cpp */; };
+		AD7CA5111AAABAA500CA24DE /* WebSteg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD7CA50D1AAABAA500CA24DE /* WebSteg.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +32,13 @@
 		AD7CA4FD1AAAA1BA00CA24DE /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		AD7CA5041AAAA1C600CA24DE /* HashTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HashTable.cpp; sourceTree = "<group>"; };
 		AD7CA5051AAAA1C600CA24DE /* HashTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HashTable.h; sourceTree = "<group>"; };
+		AD7CA5071AAABAA500CA24DE /* BinaryConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryConverter.cpp; sourceTree = "<group>"; };
+		AD7CA5081AAABAA500CA24DE /* Compressor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Compressor.cpp; sourceTree = "<group>"; };
+		AD7CA5091AAABAA500CA24DE /* http.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = http.h; sourceTree = "<group>"; };
+		AD7CA50A1AAABAA500CA24DE /* provided.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = provided.h; sourceTree = "<group>"; };
+		AD7CA50B1AAABAA500CA24DE /* Steg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Steg.cpp; sourceTree = "<group>"; };
+		AD7CA50C1AAABAA500CA24DE /* substituteHashTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = substituteHashTable.h; sourceTree = "<group>"; };
+		AD7CA50D1AAABAA500CA24DE /* WebSteg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WebSteg.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +74,13 @@
 				AD7CA4FD1AAAA1BA00CA24DE /* main.cpp */,
 				AD7CA5041AAAA1C600CA24DE /* HashTable.cpp */,
 				AD7CA5051AAAA1C600CA24DE /* HashTable.h */,
+				AD7CA5071AAABAA500CA24DE /* BinaryConverter.cpp */,
+				AD7CA5081AAABAA500CA24DE /* Compressor.cpp */,
+				AD7CA5091AAABAA500CA24DE /* http.h */,
+				AD7CA50A1AAABAA500CA24DE /* provided.h */,
+				AD7CA50B1AAABAA500CA24DE /* Steg.cpp */,
+				AD7CA50D1AAABAA500CA24DE /* WebSteg.cpp */,
+				AD7CA50C1AAABAA500CA24DE /* substituteHashTable.h */,
 			);
 			path = project4;
 			sourceTree = "<group>";
@@ -123,8 +141,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD7CA50F1AAABAA500CA24DE /* Compressor.cpp in Sources */,
+				AD7CA50E1AAABAA500CA24DE /* BinaryConverter.cpp in Sources */,
 				AD7CA5061AAAA1C600CA24DE /* HashTable.cpp in Sources */,
 				AD7CA4FE1AAAA1BA00CA24DE /* main.cpp in Sources */,
+				AD7CA5101AAABAA500CA24DE /* Steg.cpp in Sources */,
+				AD7CA5111AAABAA500CA24DE /* WebSteg.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
