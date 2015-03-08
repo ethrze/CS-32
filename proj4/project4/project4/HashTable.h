@@ -20,7 +20,9 @@ public:
     HashTable(int numBuckets, int capacity);
     ~HashTable();
     
-    \bool isFull() const;
+    bool isFull() const;
+    ￼bool set(const KeyType& key, const ValueType& value, bool permanent = false);
+    
     
 private:
     ValueType* m_bucketList;
@@ -42,6 +44,12 @@ HashTable<KeyType, ValueType>::~HashTable()
 
 template<typename KeyType, typename ValueType>
 ￼bool HashTable<KeyType, ValueType>::isFull() const
+{
+    return false;
+}
+
+template<typename KeyType, typename ValueType>
+￼bool HashTable<KeyType, ValueType>::set(const KeyType& key, const ValueType& value, bool permanent = false)
 {
     return false;
 }
