@@ -35,16 +35,24 @@ private:
     class Node {
     public:
         Node(int value)
-        : m_key(string()), m_value(value)
+        : m_key(string()), m_value(value), m_next(nullptr)
         {}
+        void setVal(ValueType val) { m_value = val; }
+        void setKey(KeyType key) { m_key = key; }
+        void setNext(Node* nex) { m_next = nex; }
+        ValueType getVal() { return m_value; }
+        Node* getNext() { return m_next; }
+        void age() { m_age++; }
     private:
-        string m_key;
-        int m_value;
+        KeyType m_key;
+        ValueType m_value;
         Node* m_next;
+        int m_age;
     };
     
     ValueType* m_bucketList;
     int m_capacity;
+    int m_fill;
 };
 
 template<typename KeyType, typename ValueType>
@@ -61,6 +69,8 @@ HashTable<KeyType, ValueType>::~HashTable()
 template<typename KeyType, typename ValueType>
 bool HashTable<KeyType, ValueType>::isFull() const
 {
+    if (m_fill == m_capacity)
+        return true;
     return false;
 }
 template<typename KeyType, typename ValueType>
