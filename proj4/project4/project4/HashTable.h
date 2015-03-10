@@ -155,17 +155,63 @@ bool HashTable<KeyType, ValueType>::set(const KeyType& key, const ValueType& val
 template<typename KeyType, typename ValueType>
 bool HashTable<KeyType, ValueType>::get(const KeyType& key, ValueType& value) const
 {
+    unsigned int newHash = computeHash(key);
+    for (int i = 0; i < m_curBuckets; i++)
+    {
+        if (newHash == m_buckList[i]->m_hash)
+        {
+            for (Node* q = m_buckList[i]->m_bucketRoot; q != nullptr; q = q->m_next)
+            {
+                if (q->m_key == key && q->m_value == value)
+                    return true;
+            }
+        }
+    }
     return false;
 }
 template<typename KeyType, typename ValueType>
 bool HashTable<KeyType, ValueType>::touch(const KeyType& key)
 {
+    unsigned int newHash = computeHash(key);
+    for (int i = 0; i < m_curBuckets; i++)
+    {
+        if (newHash == m_buckList[i]->m_hash)
+        {
+            for (Node* q = m_buckList[i]->m_bucketRoot; q != nullptr; q = q->m_next)
+            {
+                if (q->m_key == key)
+                {
+                    growOld();
+                    q->m_age = 0;
+                    return true;
+                }
+            }
+        }
+    }
     return false;
 }
 template<typename KeyType, typename ValueType>
 bool HashTable<KeyType, ValueType>::discard(KeyType& key, ValueType& value)
 {
-    return false;
+    Node* oldest;
+    Node* oldNext;
+    Node* trailer;
+    int maxAge = 0;
+    
+    for (int i = 0; i < m_curBuckets; i++)
+    {
+        trailer = m_buckList[i]->m_bucketRoot;
+        for (Node* q = m_buckList[i]->m_bucketRoot; q != nullptr; q = q->m_next)
+        {
+            if (!(m_buckList[i]->m_permanent))
+            {
+                if (m_buckList[i]->m_age > maxAge)
+                {
+                    
+                }
+            } // end permanent if
+        }
+    }
 }
 template<typename KeyType, typename ValueType>
 void HashTable<KeyType, ValueType>::growOld()
