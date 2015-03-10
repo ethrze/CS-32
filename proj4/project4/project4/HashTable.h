@@ -150,7 +150,7 @@ bool HashTable<KeyType, ValueType>::set(const KeyType& key, const ValueType& val
     if (allIn == true)
         return true;
     return false;
-    
+    // alteration
 }
 template<typename KeyType, typename ValueType>
 bool HashTable<KeyType, ValueType>::get(const KeyType& key, ValueType& value) const
