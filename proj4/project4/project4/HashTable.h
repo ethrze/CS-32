@@ -160,7 +160,7 @@ bool HashTable<KeyType, ValueType>::get(const KeyType& key, ValueType& value) co
     {
         if (newHash == m_buckList[i]->m_hash)
         {
-            for (Node* q = m_buckList[i]->m_bucketRoot; q != nullptr; q = q->m_next)
+            for (Node* q = m_buckList[i]->m_contents; q != nullptr; q = q->m_next)
             {
                 if (q->m_key == key && q->m_value == value)
                     return true;
@@ -177,7 +177,7 @@ bool HashTable<KeyType, ValueType>::touch(const KeyType& key)
     {
         if (newHash == m_buckList[i]->m_hash)
         {
-            for (Node* q = m_buckList[i]->m_bucketRoot; q != nullptr; q = q->m_next)
+            for (Node* q = m_buckList[i]->m_contents; q != nullptr; q = q->m_next)
             {
                 if (q->m_key == key)
                 {
@@ -196,22 +196,45 @@ bool HashTable<KeyType, ValueType>::discard(KeyType& key, ValueType& value)
     Node* oldest;
     Node* oldNext;
     Node* trailer;
+    Node* maxTrailer;
+    Node* index;
     int maxAge = 0;
+    bool action = false;
     
     for (int i = 0; i < m_curBuckets; i++)
     {
-        trailer = m_buckList[i]->m_bucketRoot;
-        for (Node* q = m_buckList[i]->m_bucketRoot; q != nullptr; q = q->m_next)
+        trailer = m_buckList[i]->m_contents;
+        for (Node* q = m_buckList[i]->m_contents; q != nullptr; q = q->m_next)
         {
             if (!(m_buckList[i]->m_permanent))
             {
                 if (m_buckList[i]->m_age > maxAge)
                 {
-                    
+                    maxAge = m_buckList;
+                    maxTrailer = trailer;
+                    oldNext = q->m_next;
+                    oldest = m_buckList[i];
+                    index = i;
+                    action = true;
                 }
             } // end permanent if
+            trailer = q;
         }
     }
+    if (action == true)
+    {
+        if (maxTrailer == m_buckList[index]->m_contents)
+        {
+            m_buckList[index]->m_contents = oldNext;
+        }
+        else
+        {
+            maxTrailer->m_next = oldNext;
+        }
+        delete oldest;
+        return true;
+    }
+    return false;
 }
 template<typename KeyType, typename ValueType>
 void HashTable<KeyType, ValueType>::growOld()
