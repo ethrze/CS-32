@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ADFF533D1AB008720045E9B8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADFF533C1AB008720045E9B8 /* main.cpp */; };
 		ADFF534B1AB008800045E9B8 /* BinaryConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADFF53431AB008800045E9B8 /* BinaryConverter.cpp */; };
 		ADFF534C1AB008800045E9B8 /* Compressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADFF53441AB008800045E9B8 /* Compressor.cpp */; };
 		ADFF534D1AB008800045E9B8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADFF53461AB008800045E9B8 /* main.cpp */; };
@@ -29,7 +28,6 @@
 
 /* Begin PBXFileReference section */
 		ADFF53391AB008720045E9B8 /* proj4_v2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = proj4_v2; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADFF533C1AB008720045E9B8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		ADFF53431AB008800045E9B8 /* BinaryConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryConverter.cpp; path = ../../../skeleton/BinaryConverter.cpp; sourceTree = "<group>"; };
 		ADFF53441AB008800045E9B8 /* Compressor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Compressor.cpp; path = ../../../skeleton/Compressor.cpp; sourceTree = "<group>"; };
 		ADFF53451AB008800045E9B8 /* http.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = http.h; path = ../../../skeleton/http.h; sourceTree = "<group>"; };
@@ -78,7 +76,6 @@
 				ADFF53481AB008800045E9B8 /* Steg.cpp */,
 				ADFF53491AB008800045E9B8 /* substituteHashTable.h */,
 				ADFF534A1AB008800045E9B8 /* WebSteg.cpp */,
-				ADFF533C1AB008720045E9B8 /* main.cpp */,
 			);
 			path = proj4_v2;
 			sourceTree = "<group>";
@@ -140,7 +137,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADFF534C1AB008800045E9B8 /* Compressor.cpp in Sources */,
-				ADFF533D1AB008720045E9B8 /* main.cpp in Sources */,
 				ADFF534D1AB008800045E9B8 /* main.cpp in Sources */,
 				ADFF534B1AB008800045E9B8 /* BinaryConverter.cpp in Sources */,
 				ADFF534E1AB008800045E9B8 /* Steg.cpp in Sources */,
