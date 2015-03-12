@@ -68,10 +68,10 @@
 		AD470C3B1AB1680900ACE7C5 /* vs2 */ = {
 			isa = PBXGroup;
 			children = (
+				AD470C531AB1691100ACE7C5 /* main.cpp */,
 				AD470C501AB1691100ACE7C5 /* BinaryConverter.cpp */,
 				AD470C511AB1691100ACE7C5 /* Compressor.cpp */,
 				AD470C521AB1691100ACE7C5 /* http.h */,
-				AD470C531AB1691100ACE7C5 /* main.cpp */,
 				AD470C541AB1691100ACE7C5 /* provided.h */,
 				AD470C551AB1691100ACE7C5 /* Steg.cpp */,
 				AD470C561AB1691100ACE7C5 /* substituteHashTable.h */,

@@ -8,15 +8,54 @@ const size_t BITS_PER_UNSIGNED_SHORT = 16;
 string convertNumberToBitString(unsigned short number);
 bool convertBitStringToNumber(string bitString, unsigned short& number);
 
+// go from unsigned shorts to tabs and spaces
+// every 16 chars in the string is a number basically
 string BinaryConverter::encode(const vector<unsigned short>& numbers)
 {
-	return "";  // This compiles, but may not be correct
+    string binString = "";
+    for (auto q = numbers.begin(); q != numbers.end(); q++)
+    {
+        binString += convertNumberToBitString(*q);
+    }
+    string tabspace = "";
+    for (int i = 0; i < binString.length(); i++)
+    {
+        if (binString[i] != '0' && binString[i] != '1')
+            return "Your vector isn't properly formatted.";
+        if (binString[i] == '0')
+            tabspace += ' ';
+        if (binString[i] == '1')
+            tabspace += '\t';
+    }
+    return tabspace;  // This compiles, but may not be correct
 }
 
+// take block of 16 \t and " " and go to binary
+// take the binary to unsigned shorts
+// BINGO, BABE
 bool BinaryConverter::decode(const string& bitString,
 							 vector<unsigned short>& numbers)
 {
-	return false;  // This compiles, but may not be correct
+    if (bitString.length() % BITS_PER_UNSIGNED_SHORT != 0) // if it doesn't break down into units of 16, bad
+        return false;
+    string binary = "";
+    unsigned short num;
+    for (unsigned short i = 0; i < bitString.length(); i++)
+    {
+        if (bitString[i] != ' ' && bitString[i] != '\t') // nothin' but tabs n' spaces
+            return false;
+        if (bitString[i] == ' ')
+            binary += '0';
+        if (bitString[i] == '\t')
+            binary += '1';
+        int innum = i+1;
+        if (innum % 16 == 0)
+        {
+            convertBitStringToNumber(binary.substr(((innum/BITS_PER_UNSIGNED_SHORT)-1)*BITS_PER_UNSIGNED_SHORT, innum), num);
+            numbers.push_back(num);
+        }
+    }
+    return true;
 }
 
 string convertNumberToBitString(unsigned short number)
