@@ -7,23 +7,34 @@ using namespace std;
 int main()
 {
     cout << "Test driver not yet written." << endl;
-    vector<unsigned short> numbers;
-    if (!BinaryConverter::decode("               \t             \t \t                ", numbers))
-        cout << "Bad format dude" << endl;
-    else {
-        for (vector<unsigned short>::iterator q = numbers.begin(); q != numbers.end(); q++)
-            cout << *q;
-        cout << endl;
-    }
-    string fal = BinaryConverter::encode(numbers);
-    for (int i = 0; i < fal.length(); i++)
-    {
-        if (fal[i] == ' ')
-            cout << '_' ;
-        else if (fal[i] == '\t')
-            cout << '-';
-
-    }
+    
+    string test = "AAAAAAAAAB";
+    vector<unsigned short> vec;
+    Compressor::compress(test, vec);
+    for (auto q = vec.begin(); q != vec.end(); q++)
+        cout << *q << ", ";
+    
+    
+//    vector<unsigned short> numbers;
+//    if (!BinaryConverter::decode("               \t             \t \t                ", numbers))
+//        cout << "Bad format dude" << endl;
+//    else {
+//        for (vector<unsigned short>::iterator q = numbers.begin(); q != numbers.end(); q++)
+//            cout << *q;
+//        cout << endl;
+//    }
+//    string fal = BinaryConverter::encode(numbers);
+//    for (int i = 0; i < fal.length(); i++)
+//    {
+//        if (fal[i] == ' ')
+//            cout << '_' ;
+//        else if (fal[i] == '\t')
+//            cout << '-';
+//
+//    }
+    
+    
+    
     cout << endl;
 	// string text;
 	// if ( ! WebSteg::hideMessageInPage("http://cs.ucla.edu", "Hello there!", text))
