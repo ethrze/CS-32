@@ -1295,4 +1295,95 @@ Elizabeth\
 		Louise\
 		James\
 preorder traversal : process the node before its children\
-postorder traversal : process the node after its child subtrees	}
+postorder traversal : process the node after its child subtrees	\
+\
+priority queue:\
+\
+like print jobs!\
+\
+unsorted vector \
+	insert: O(1)\
+	remove: O(N)\
+sorted vector\
+	insert: O(N)\
+	remove: O(1)\
+binary search tree\
+	insert: O(logN)\
+	remove: O(logN)\
+\
+\
+A 
+\f1\i (max)heap
+\f0\i0  is a complete binary tree where the value at each node is >= all values in the subtree rooted at that node. \
+("Every node is bigger than the ones below it.")\
+\
+A 
+\f1\i minheap
+\f0\i0  is a complete binary tree where the value at each node is <= all values in the subtree rooted at that node. \
+("Every node is smaller than the ones below it.")\
+\
+Add an item: \
+	Add it to get a complete binary tree\
+	Bubble up the new value to its proper position\
+Remove the biggest item from a maxheap (smallest from minheap):\
+	Remove the root, replacing it to make a complete binary tree\
+	Trickle down the new root value to its proper place\
+\
+Heap\
+	insert: O(logN)\
+	remove: O(logN)\
+\
+say you numbered your children and parents based on position\
+[pos # of parent] parent(i) = ( i - 1 / 2 )\
+[pos # of child] children(j) = (2j + 1) & (2j + 2) [provided they're strictly < number of items)\
+\
+so if you pack all your nodes into an array based on position, these formulas will tell you what to look at in tree-structure, but way easier to play with. \
+perk:->> no dynamic storage allocation (no new/delete), saves time and space\
+\
+\
+heapsort:\
+	Make the array a heap by working back from the end\
+	Repeatedly remove an item from the heap, putting it at the end (before all items already put at the end)\
+N/2(log1) + n/4(log2) + N/8(log2) +\'85n/2^k(logk)\
+O(NlogN)\
+\
+quicksort\
+mergesort		O(NlogN)\
+heapsort\
+\
+
+\f2\b STRUCTAS
+\f0\b0 \
+set\
+multiset		<set>\
+\
+map\
+multimap		<map>\
+\
+map<string, double> ious; \
+while (cin>>name>>ant)\
+	ious[name] += amt; \
+\
+\
+\
+So say Smallberg works for the registrar, \
+\
+C courses; S = avg # of students/class\
+\
+map <CourseID, list<Student>>\
+Is Joe Bruin in CS32?\
+\
+lookup Course, look through students in list\
+(logC) + S\
+\
+List all of Joe Bruin's courses\
+C*S\
+\
+map<CourseID, unordered_set<Student>> // unordered_set : collection of all students organized as HashTable\
+C	(unordered_set does lookup in constant time)\
+\
+map<CourseID, set<Student>> // binary search tree\
+C*logS\
+\
+\
+}
