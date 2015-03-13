@@ -6,14 +6,23 @@ using namespace std;
 
 int main()
 {
-    cout << "Test driver not yet written." << endl;
+//    cout << "Test driver not yet written." << endl;
     
-    string test = "AAAAAAAAAB";
-    vector<unsigned short> vec;
-    Compressor::compress(test, vec);
-    for (auto q = vec.begin(); q != vec.end(); q++)
-        cout << *q << ", ";
+    //    string test = "AAAAAAAAAB";
+    string test;
+    //    vector<unsigned short> vec;
+    vector<unsigned short> vec = {65, 65, 256, 65, 65, 65, 256, 66, 257};
     
+    bool rad = Compressor::decompress(vec, test);
+//    for (auto q = vec.begin(); q != vec.end(); q++)
+//        cout << *q << "";
+    if (rad == true)
+    {
+        cerr << test << endl;
+    }
+    else {
+        cerr << "False" << endl;
+    }
     
 //    vector<unsigned short> numbers;
 //    if (!BinaryConverter::decode("               \t             \t \t                ", numbers))

@@ -90,5 +90,104 @@ void Compressor::compress(const string& s, vector<unsigned short>& numbers)
 
 bool Compressor::decompress(const vector<unsigned short>& numbers, string& s)
 {
-	return false;  // This compiles, but may not be correct
+    unsigned short cap = *(numbers.end()-1);
+    cout << cap << endl;
+    int capacity = (int)(cap);
+    int nBuckets = capacity * 2;
+    
+    // 1.
+    HashTable<unsigned short, string> H(nBuckets, capacity);
+    // 2.
+    for (unsigned short j = 0; j < 256; j++)
+    {
+        string charj = string();
+        charj += static_cast<char>(j);
+        H.set(j, charj, true);
+    }
+    // 3.
+    int nextFreeID = 256;
+    // 4.
+    string runSoFar = string();
+    // 5. empty string for decompressed result
+    string output = string();
+    
+    
+    // <unsigned short, string>
+    // 6.
+    for (auto q = numbers.begin(); q != (numbers.end()-1); q++)
+    {
+        unsigned short us = *q;
+        // a.
+        if (us <= 255) // represents normal 1-byte character
+        {
+            string expandedRun = "";
+            // i.
+            string str;
+            H.get(us, str);
+            output += str;
+            // ii.
+            if (runSoFar == "")
+            {
+                runSoFar += str;
+                continue;
+            }
+            // iii.
+            else
+            {
+                expandedRun += runSoFar;
+                expandedRun += us;
+            }
+            // iv.
+            if (!H.isFull())
+            {
+                H.set(nextFreeID, expandedRun);
+                nextFreeID++;
+            }
+            // v.
+            else
+            {
+                // 1.
+                unsigned short key;
+                string value;
+                H.discard(key, value);
+                // 2.
+                H.set(key, expandedRun);
+            }
+            // vi.
+            runSoFar = "";
+            // v.
+            continue;
+        }
+        // b.
+        else
+        {
+            // i.
+            string S;
+            if (H.get(us, S) == false)
+            {
+                cout << "Failure in formatting?" << endl;
+                return false;
+            }
+            // ii.
+            H.touch(us);
+            // iii.
+            H.get(us, S);
+            output += S;
+            // iv.
+            runSoFar = S;
+            // v.
+            continue;
+        }
+    }
+    // 7.
+    s = output;
+	return true;
 }
+
+
+
+
+
+
+
+
