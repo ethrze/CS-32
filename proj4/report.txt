@@ -1,5 +1,17 @@
 report.txt
-Project 4
-Grace Phillips // tired CS32 student
 
-1. Whether any of your classes have bugs or other problems that we should know about.2. Whether or not each satisfies our big-O requirements, and if not, what you did instead and what the big-O is for your version.3. How three of your methods work – use high-level pseudocode to describe these:	• HashTable’s set() method	• HashTable’s touch() method	• HashTable’s discard() method
+1. I /think/ Steg::hide works right now. The classes that should be working are the ones in BinaryConverter and Compressor. HashTable is a bugfest. I left it for last of all. 
+
+2. I /think/ big O is on point for all working functions. 
+
+3. 
+As I said, HashTable happened to be my lowest priority, but I'll try and give you a picture of how I was trying to implement these?
+
+HashTable set():
+Hash the key, look in the bucket for identical keys, if found, update the capacity, if not, add Node to bucket. 
+
+HashTable touch():
+Every Node has an age. Permanent nodes are -1 to make it really obvious. This function goes looking for the indicated Node, if it finds it, it sets it's age back to zero, and then it ages everyone else— only one element can be zero at a time. 
+
+HashTable discard():
+Looks for the indicated Node, removes it from the Bucket it's in, calls its destructor.

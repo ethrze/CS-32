@@ -8,10 +8,14 @@ int main()
 {
 //    cout << "Test driver not yet written." << endl;
     
+    vector<unsigned short> numbers;
+    string msg = "hey";
     
-    
-    string hostIn = "<html>___\nQ_-QQ_-_\nBBB---___\n\nGG_\nBBB_\n-\nDDD\nEEE_</html>___";
-    string msg;
+    string hostIn = "<html>   \nQ \tQQ \t \nBBB\t\t\t   \n\nGG \nBBB \n\t\nDDD\nEEE </html>   ";
+//    BinaryConverter::decode("____-_---_-______--_-_-__---_--_", numbers);
+//    Compressor::decompress(numbers, msg);
+//    cout << msg;
+
     string hostOut;
     
     Steg::hide(hostIn, msg, hostOut); 
