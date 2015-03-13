@@ -10,9 +10,11 @@ int main()
     
     
     
+    string hostIn = "<html>___\nQ_-QQ_-_\nBBB---___\n\nGG_\nBBB_\n-\nDDD\nEEE_</html>___";
+    string msg;
+    string hostOut;
     
-    
-    
+    Steg::hide(hostIn, msg, hostOut); 
     
     
 //    //    string test = "AAAAAAAAAB";
