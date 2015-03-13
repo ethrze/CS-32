@@ -4,6 +4,8 @@ using namespace std;
 
 bool Steg::hide(const string& hostIn, const string& msg, string& hostOut) 
 {
+    
+    
 	return false;  // This compiles, but may not be correct
 }
 

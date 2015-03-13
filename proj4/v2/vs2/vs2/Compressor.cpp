@@ -23,7 +23,7 @@ void Compressor::compress(const string& s, vector<unsigned short>& numbers)
     // 2. populate hash table
     for (unsigned short j = 0; j < 256; j++)
     {
-//        char charj = static_cast<char>(j);
+        //        char charj = static_cast<char>(j);
         string charj = string();
         charj += static_cast<char>(j);
         H.set(charj, j, true);
@@ -85,13 +85,15 @@ void Compressor::compress(const string& s, vector<unsigned short>& numbers)
     }
     // final step
     V.push_back(cap);
-    numbers = V; 
+    numbers = V;
 }
+
+
+
 
 bool Compressor::decompress(const vector<unsigned short>& numbers, string& s)
 {
     unsigned short cap = *(numbers.end()-1);
-    cout << cap << endl;
     int capacity = (int)(cap);
     int nBuckets = capacity * 2;
     
@@ -181,7 +183,7 @@ bool Compressor::decompress(const vector<unsigned short>& numbers, string& s)
     }
     // 7.
     s = output;
-	return true;
+    return true;
 }
 
 
